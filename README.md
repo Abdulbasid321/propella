@@ -8,15 +8,32 @@ Propella is a full-stack AI-powered study platform built for Nigerian students s
 
 ## Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | Next.js 16, React 19, Tailwind CSS v4, TypeScript |
-| Backend | Express 4, Mongoose 8, TypeScript |
-| Database | MongoDB (Atlas or local) |
-| AI | Anthropic Claude API (Sonnet for generation, Haiku for chat) |
-| State | TanStack Query v5, Zustand |
-| Monorepo | pnpm workspaces |
-| Deployment | Vercel (web), Railway / Render (api), MongoDB Atlas |
+**Frontend**
+
+![Next.js](https://img.shields.io/badge/Next.js_16-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white)
+![Zustand](https://img.shields.io/badge/Zustand-433E38?style=for-the-badge&logo=react&logoColor=white)
+
+**Backend**
+
+![Express](https://img.shields.io/badge/Express_4-000000?style=for-the-badge&logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js_20-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Zod](https://img.shields.io/badge/Zod-3E67B1?style=for-the-badge&logo=zod&logoColor=white)
+
+**AI**
+
+![Anthropic](https://img.shields.io/badge/Claude_API-000000?style=for-the-badge&logo=anthropic&logoColor=white)
+
+**Tooling & Deployment**
+
+![pnpm](https://img.shields.io/badge/pnpm-F69220?style=for-the-badge&logo=pnpm&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![Railway](https://img.shields.io/badge/Railway-0B0D0E?style=for-the-badge&logo=railway&logoColor=white)
+![MongoDB Atlas](https://img.shields.io/badge/Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 
 ---
 
@@ -62,8 +79,8 @@ Fill in `apps/api/.env`:
 | Variable | Description |
 |---|---|
 | `DATABASE_URL` | MongoDB connection string |
-| `JWT_ACCESS_SECRET` | Long random string (`openssl rand -hex 64`) |
-| `JWT_REFRESH_SECRET` | Long random string (`openssl rand -hex 64`) |
+| `JWT_ACCESS_SECRET` | Long random string — `openssl rand -hex 64` |
+| `JWT_REFRESH_SECRET` | Long random string — `openssl rand -hex 64` |
 | `ANTHROPIC_API_KEY` | From [console.anthropic.com](https://console.anthropic.com) — required for quizzes and AI chat |
 | `FRONTEND_URL` | `http://localhost:3000` in development |
 
