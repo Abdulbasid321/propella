@@ -1,0 +1,17 @@
+{
+  "name": "propella",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --parallel --filter './apps/*' dev",
+    "build": "pnpm --filter './packages/*' build && pnpm --filter './apps/*' build",
+    "lint": "pnpm --recursive lint",
+    "type-check": "pnpm --recursive type-check"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=10"
+  }
+}

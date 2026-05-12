@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+@theme {
+  /* Surfaces (light) */
+  --color-paper: #FBF9F4;
+  --color-paper-2: #F4F1EA;
+  --color-paper-3: #ECE7DD;
+  --color-card: #FFFFFF;
+  --color-ink: #1A1814;
+  --color-ink-2: #4A463E;
+  --color-ink-3: #7C766B;
+  --color-rule: #E5DFD2;
+  --color-rule-2: #D9D2C2;
+
+  /* Accent - Ink Red */
+  --color-accent: #B23A2E;
+  --color-accent-2: #8E2B22;
+  --color-accent-tint: #F7E8E5;
+
+  /* Functional */
+  --color-success: #2F6B3F;
+  --color-warning: #B87A1F;
+  --color-danger: #A82F2F;
+
+  /* Subject hues */
+  --color-subj-english: #3F5B7F;
+  --color-subj-math: #6B4E8F;
+  --color-subj-physics: #2F6B6B;
+  --color-subj-chemistry: #8E5A2B;
+  --color-subj-biology: #4F7A3F;
+  --color-subj-economics: #8E7F2B;
+  --color-subj-government: #8E3F5A;
+  --color-subj-literature: #5A3F8E;
+  --color-subj-default: #7C766B;
+
+  /* Typography */
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+
+  /* Radii */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 0 0 rgba(26,24,20,0.04), 0 1px 3px rgba(26,24,20,0.06);
+  --shadow-md: 0 2px 4px rgba(26,24,20,0.06), 0 4px 12px rgba(26,24,20,0.08);
+  --shadow-lg: 0 8px 24px rgba(26,24,20,0.12), 0 2px 6px rgba(26,24,20,0.08);
+  --shadow-inset: inset 0 1px 0 0 rgba(255,255,255,0.6);
+}
+
+[data-theme="dark"] {
+  --color-paper: #14130F;
+  --color-paper-2: #1C1A15;
+  --color-paper-3: #25221C;
+  --color-card: #1A1813;
+  --color-ink: #F4F0E6;
+  --color-ink-2: #BAB3A2;
+  --color-ink-3: #7C766B;
+  --color-rule: #2D2A23;
+  --color-rule-2: #3A362D;
+  --color-accent: #D8584A;
+  --color-accent-2: #BC4438;
+  --color-accent-tint: #2A1A17;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
