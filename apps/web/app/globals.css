@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+@utility scrollbar-hide {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @theme {
   /* Surfaces (light) */
   --color-paper: #FBF9F4;

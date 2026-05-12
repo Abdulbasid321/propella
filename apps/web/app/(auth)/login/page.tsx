@@ -13,12 +13,14 @@ import { api } from '@/lib/api-client'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import type { AuthUser } from '@propella/shared'
 import { useState } from 'react'
+import { Eye, EyeOff } from 'lucide-react'
 
 export default function LoginPage() {
   const router = useRouter()
   const setUser = useAuthStore((s) => s.setUser)
   const setToken = useAuthStore((s) => s.setAccessToken)
   const [serverError, setServerError] = useState<string | null>(null)
+  const [showPassword, setShowPassword] = useState(false)
 
   const {
     register,
@@ -82,14 +84,37 @@ export default function LoginPage() {
                 Forgot password?
               </Link>
             </div>
-            <Input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              placeholder="••••••••"
-              error={errors.password?.message}
-              {...register('password')}
-            />
+            <div style={{ position: 'relative' }}>
+              <Input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                placeholder="••••••••"
+                className="pr-10"
+                error={errors.password?.message}
+                {...register('password')}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                style={{
+                  position: 'absolute',
+                  right: 12,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  padding: 0,
+                  cursor: 'pointer',
+                  color: 'var(--color-ink-3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                {showPassword ? <EyeOff size={16} strokeWidth={1.5} /> : <Eye size={16} strokeWidth={1.5} />}
+              </button>
+            </div>
             {errors.password && (
               <p className="mt-1.5 text-[13px] text-[var(--color-danger)]">{errors.password.message}</p>
             )}

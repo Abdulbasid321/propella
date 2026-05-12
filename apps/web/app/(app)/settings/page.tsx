@@ -534,6 +534,7 @@ export default function SettingsPage() {
 
       {/* Tab bar */}
       <div
+        className="scrollbar-hide"
         style={{
           display: 'flex',
           gap: 0,

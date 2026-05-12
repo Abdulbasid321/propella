@@ -6,6 +6,7 @@ import { z } from 'zod'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useState } from 'react'
+import { Eye, EyeOff } from 'lucide-react'
 import { SignupSchema } from '@propella/shared'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -61,6 +62,7 @@ export default function SignupPage() {
   const setToken = useAuthStore((s) => s.setAccessToken)
   const [serverError, setServerError] = useState<string | null>(null)
   const [passwordValue, setPasswordValue] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
 
   const {
     register,
@@ -134,17 +136,40 @@ export default function SignupPage() {
 
           <div>
             <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              autoComplete="new-password"
-              placeholder="At least 8 characters"
-              error={errors.password?.message}
-              {...register('password', {
-                onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-                  setPasswordValue(e.target.value),
-              })}
-            />
+            <div style={{ position: 'relative' }}>
+              <Input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="new-password"
+                placeholder="At least 8 characters"
+                className="pr-10"
+                error={errors.password?.message}
+                {...register('password', {
+                  onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                    setPasswordValue(e.target.value),
+                })}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                style={{
+                  position: 'absolute',
+                  right: 12,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  padding: 0,
+                  cursor: 'pointer',
+                  color: 'var(--color-ink-3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                {showPassword ? <EyeOff size={16} strokeWidth={1.5} /> : <Eye size={16} strokeWidth={1.5} />}
+              </button>
+            </div>
             <PasswordStrengthBar password={passwordValue} />
             {errors.password && (
               <p className="mt-1.5 text-[13px] text-[var(--color-danger)]">{errors.password.message}</p>
