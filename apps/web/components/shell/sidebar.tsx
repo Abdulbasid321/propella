@@ -1,14 +1,15 @@
 'use client'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, Compass, Calendar, ClipboardCheck, FileText,
-  Timer, Sparkles, TrendingUp, Trophy, Settings, LogOut,
+  Timer, Sparkles, TrendingUp, Trophy, User, CreditCard, Bell,
+  LifeBuoy, LogOut,
 } from 'lucide-react'
 import { Logo } from '@/components/common/logo'
 import { Badge } from '@/components/ui/badge'
 import { useAuthStore } from '@/lib/stores/auth-store'
-import { api } from '@/lib/api-client'
+import { SignOutDialog } from '@/components/auth/sign-out-dialog'
 import { cn } from '@/lib/utils/cn'
 import { useState, useRef, useEffect } from 'react'
 
@@ -26,10 +27,9 @@ const navItems = [
 
 export function Sidebar() {
   const pathname = usePathname()
-  const router = useRouter()
   const user = useAuthStore((s) => s.user)
-  const logout = useAuthStore((s) => s.logout)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [signOutOpen, setSignOutOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -43,16 +43,6 @@ export function Sidebar() {
     }
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [menuOpen])
-
-  async function handleSignOut() {
-    try {
-      await api.post('/auth/logout')
-    } catch {
-      // ignore
-    }
-    logout()
-    router.push('/login')
-  }
 
   const initial = user?.name?.charAt(0).toUpperCase() ?? 'U'
 
@@ -161,7 +151,7 @@ export function Sidebar() {
           </div>
         </button>
 
-        {/* Dropdown menu */}
+        {/* Dropdown menu — opens upward */}
         {menuOpen && (
           <div
             style={{
@@ -169,7 +159,7 @@ export function Sidebar() {
               bottom: '100%',
               left: 16,
               right: 16,
-              backgroundColor: 'var(--color-card)',
+              backgroundColor: 'var(--color-paper-2)',
               border: '1px solid var(--color-rule)',
               borderRadius: 'var(--radius-md)',
               boxShadow: 'var(--shadow-md)',
@@ -177,24 +167,41 @@ export function Sidebar() {
               marginBottom: 4,
             }}
           >
-            <Link
-              href="/settings"
-              onClick={() => setMenuOpen(false)}
-              className="flex items-center gap-2.5 px-4 py-2.5 text-[13px] text-[var(--color-ink-2)] hover:text-[var(--color-ink)] hover:bg-[var(--color-paper-2)] no-underline transition-colors"
-            >
-              <Settings size={14} strokeWidth={1.5} />
-              Settings
-            </Link>
+            {[
+              { href: '/settings', icon: User, label: 'Profile' },
+              { href: '/settings?tab=plan', icon: CreditCard, label: 'Plan & billing' },
+              { href: '/settings?tab=notifications', icon: Bell, label: 'Notifications' },
+              { href: '/help', icon: LifeBuoy, label: 'Help & support' },
+            ].map(({ href, icon: Icon, label }) => (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setMenuOpen(false)}
+                className="flex items-center gap-2.5 px-3 py-2 text-[14px] font-medium text-[var(--color-ink-2)] hover:text-[var(--color-ink)] hover:bg-[var(--color-paper-3)] no-underline transition-colors"
+              >
+                <Icon size={16} strokeWidth={1.5} />
+                {label}
+              </Link>
+            ))}
+
+            {/* Divider */}
+            <div style={{ height: 1, backgroundColor: 'var(--color-rule)', margin: '4px 0' }} />
+
             <button
-              onClick={handleSignOut}
-              className="flex items-center gap-2.5 px-4 py-2.5 text-[13px] text-[var(--color-ink-2)] hover:text-[var(--color-danger)] hover:bg-[var(--color-paper-2)] transition-colors w-full text-left"
+              onClick={() => { setMenuOpen(false); setSignOutOpen(true) }}
+              className="flex items-center gap-2.5 px-3 py-2 text-[14px] font-medium w-full text-left transition-colors"
+              style={{ color: 'var(--color-danger)', background: 'none', border: 'none', cursor: 'pointer' }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-accent-tint)')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
             >
-              <LogOut size={14} strokeWidth={1.5} />
+              <LogOut size={16} strokeWidth={1.5} />
               Sign out
             </button>
           </div>
         )}
       </div>
+
+      <SignOutDialog open={signOutOpen} onClose={() => setSignOutOpen(false)} />
     </aside>
   )
 }

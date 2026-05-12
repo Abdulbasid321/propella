@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose'
+import mongoose, { Schema, model, Document, Types } from 'mongoose'
 
 export type ReminderType =
   | 'study_session'
@@ -63,4 +63,4 @@ const reminderSchema = new Schema<IReminder>(
 
 reminderSchema.index({ scheduledFor: 1, status: 1 })
 
-export const ReminderModel = model<IReminder>('Reminder', reminderSchema)
+export const ReminderModel = (mongoose.models['Reminder'] as ReturnType<typeof model<IReminder>>) ?? model<IReminder>('Reminder', reminderSchema)

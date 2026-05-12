@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose'
+import mongoose, { Schema, model, Document, Types } from 'mongoose'
 
 export interface IQuizOption {
   id: 'A' | 'B' | 'C' | 'D'
@@ -86,4 +86,4 @@ const quizSchema = new Schema<IQuiz>(
 
 quizSchema.index({ userId: 1, createdAt: -1 })
 
-export const QuizModel = model<IQuiz>('Quiz', quizSchema)
+export const QuizModel = (mongoose.models['Quiz'] as ReturnType<typeof model<IQuiz>>) ?? model<IQuiz>('Quiz', quizSchema)

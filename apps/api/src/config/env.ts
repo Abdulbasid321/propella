@@ -1,4 +1,8 @@
 import { z } from 'zod'
+import { config } from 'dotenv'
+import { resolve } from 'path'
+
+config({ path: resolve(__dirname, '../../.env') })
 
 const EnvSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
@@ -6,8 +10,8 @@ const EnvSchema = z.object({
   DATABASE_URL: z.string(),
   JWT_ACCESS_SECRET: z.string(),
   JWT_REFRESH_SECRET: z.string(),
-  ANTHROPIC_API_KEY: z.string(),
-  RESEND_API_KEY: z.string(),
+  ANTHROPIC_API_KEY: z.string().optional().default(''),
+  RESEND_API_KEY: z.string().optional().default(''),
   FRONTEND_URL: z.string(),
   COOKIE_DOMAIN: z.string().optional(),
 })

@@ -1267,6 +1267,55 @@ Quizzes is removed from the bar and moves into the Tools sheet. Most quiz starts
 
 **Reduced motion:** falls back to instant open/close (no translate animation).
 
+### 6.4.2 Sign out
+
+Sign-out lives in three surfaces:
+
+**Desktop — sidebar user card menu:**
+At the bottom of the desktop sidebar, the user card is a clickable trigger that opens a small popover menu above it (anchored upward). Menu width matches the user card width minus side padding. Menu items in this exact order, each a row with a Lucide icon (16px, ink-2) and label (Geist 500 14px):
+
+- `User` — "Profile" → /settings
+- `CreditCard` — "Plan & billing" → /settings?tab=plan
+- `Bell` — "Notifications" → /settings?tab=notifications
+- `LifeBuoy` — "Help & support" → /help
+- Hairline divider (`--color-rule`)
+- `LogOut` — "Sign out" → triggers confirmation dialog (text and icon in `--color-danger`; hover bg `--color-accent-tint`)
+
+Menu styling: paper-2 bg, `--color-rule` border, radius-md, shadow-md. Padding py-1. Each row px-3 py-2, hover bg `--color-paper-3`.
+
+**Mobile — settings page bottom:**
+The `/settings` page has a sign-out section below all tab content:
+- Full-width button, danger styling: `--color-card` bg, 1px solid `--color-danger` border, `--color-danger` text, radius-sm, py-3
+- Lucide `LogOut` icon (16px, danger) left of label, gap-2
+- 32px gap above this section from the last tab card
+- Below button: caption "Signed in as {user.email}" in ink-3 centered, font-size 12px
+- Below that: "Propella v1.0.0" in ink-3 centered, font-size 12px
+
+The settings page reads `?tab=` query param on mount to support deep-linking from the sidebar menu.
+
+**Confirmation dialog (both surfaces):**
+Tapping Sign out from either surface opens a confirmation dialog:
+- Icon: 40×40 accent-tint circle with `LogOut` icon (18px, danger)
+- Title (Fraunces 20px 500): "Sign out of Propella?"
+- Body (14px ink-2): "You can sign back in anytime. Your streak and progress are saved."
+- Two buttons right-aligned: "Cancel" (ghost variant) and "Sign out" (danger styling, inline)
+- Dialog: card bg, rule border, radius-md, shadow-md, width min(400px, 100vw-32px), centered in viewport
+- Backdrop: rgba(0,0,0,0.45), z-index 200; dialog z-index 201
+
+On confirm:
+1. Call `POST /auth/logout` (clears httpOnly refresh cookie server-side; returns 204)
+2. `queryClient.clear()` — clears all TanStack Query cache
+3. `logout()` — clears Zustand auth store (token, user, isAuthenticated)
+4. `router.push('/login')` — redirect to sign-in, NOT to /
+
+**Backend `POST /auth/logout`:**
+- Reads refresh token from httpOnly cookie
+- Clears the refresh token cookie on the response (same name, same options, maxAge 0)
+- Returns 204 No Content — no body
+- Idempotent: calling when already signed out returns 204, not 401
+
+Component: `components/auth/sign-out-dialog.tsx`
+
 ### 6.5 Dashboard (`app/(app)/dashboard/page.tsx`)
 
 Layout: a 12-column grid on lg, 1 column on mobile. NOT a uniform card wall. Some cards span 8 cols, some span 4. Asymmetric.

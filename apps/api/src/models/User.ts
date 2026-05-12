@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose'
+import mongoose, { Schema, model, Document, Types } from 'mongoose'
 
 export interface IUser extends Document {
   _id: Types.ObjectId
@@ -94,4 +94,4 @@ const userSchema = new Schema<IUser>(
 
 userSchema.index({ createdAt: 1 })
 
-export const UserModel = model<IUser>('User', userSchema)
+export const UserModel = (mongoose.models['User'] as ReturnType<typeof model<IUser>>) ?? model<IUser>('User', userSchema)

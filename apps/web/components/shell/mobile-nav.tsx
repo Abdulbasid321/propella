@@ -32,14 +32,11 @@ export function MobileNav() {
   return (
     <>
       <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40"
+        className="md:hidden flex items-center justify-around fixed bottom-0 left-0 right-0 z-40"
         style={{
           height: 64,
           backgroundColor: 'var(--color-paper)',
           borderTop: '1px solid var(--color-rule)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-around',
           paddingBottom: 'env(safe-area-inset-bottom)',
         }}
       >

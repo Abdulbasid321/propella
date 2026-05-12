@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose'
+import mongoose, { Schema, model, Document, Types } from 'mongoose'
 
 export interface ITopicCovered {
   subjectSlug: string
@@ -71,4 +71,4 @@ const marathonRunSchema = new Schema<IMarathonRun>(
   { timestamps: true },
 )
 
-export const MarathonRunModel = model<IMarathonRun>('MarathonRun', marathonRunSchema)
+export const MarathonRunModel = (mongoose.models['MarathonRun'] as ReturnType<typeof model<IMarathonRun>>) ?? model<IMarathonRun>('MarathonRun', marathonRunSchema)

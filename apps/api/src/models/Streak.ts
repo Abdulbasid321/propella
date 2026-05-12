@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose'
+import mongoose, { Schema, model, Document, Types } from 'mongoose'
 
 export interface IStreak extends Document {
   _id: Types.ObjectId
@@ -29,4 +29,4 @@ const streakSchema = new Schema<IStreak>(
   { timestamps: true },
 )
 
-export const StreakModel = model<IStreak>('Streak', streakSchema)
+export const StreakModel = (mongoose.models['Streak'] as ReturnType<typeof model<IStreak>>) ?? model<IStreak>('Streak', streakSchema)

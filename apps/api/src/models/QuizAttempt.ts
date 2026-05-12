@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose'
+import mongoose, { Schema, model, Document, Types } from 'mongoose'
 
 export interface IQuizAnswer {
   questionId: string
@@ -74,4 +74,4 @@ const quizAttemptSchema = new Schema<IQuizAttempt>(
   { timestamps: true },
 )
 
-export const QuizAttemptModel = model<IQuizAttempt>('QuizAttempt', quizAttemptSchema)
+export const QuizAttemptModel = (mongoose.models['QuizAttempt'] as ReturnType<typeof model<IQuizAttempt>>) ?? model<IQuizAttempt>('QuizAttempt', quizAttemptSchema)

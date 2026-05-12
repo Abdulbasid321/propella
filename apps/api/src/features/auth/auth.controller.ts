@@ -105,7 +105,7 @@ export async function logout(
 ): Promise<void> {
   try {
     clearRefreshCookie(res)
-    res.status(200).json({ data: { message: 'Logged out successfully' } })
+    res.status(204).end()
   } catch (err) {
     next(err)
   }

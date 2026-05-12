@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose'
+import mongoose, { Schema, model, Document, Types } from 'mongoose'
 
 export interface ISubjectTopic {
   _id: Types.ObjectId
@@ -55,4 +55,4 @@ const subjectSchema = new Schema<ISubject>(
   { timestamps: true },
 )
 
-export const SubjectModel = model<ISubject>('Subject', subjectSchema)
+export const SubjectModel = (mongoose.models['Subject'] as ReturnType<typeof model<ISubject>>) ?? model<ISubject>('Subject', subjectSchema)

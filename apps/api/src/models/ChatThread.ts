@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose'
+import mongoose, { Schema, model, Document, Types } from 'mongoose'
 
 export interface IChatMessage {
   id: string
@@ -52,4 +52,4 @@ const chatThreadSchema = new Schema<IChatThread>(
   { timestamps: true },
 )
 
-export const ChatThreadModel = model<IChatThread>('ChatThread', chatThreadSchema)
+export const ChatThreadModel = (mongoose.models['ChatThread'] as ReturnType<typeof model<IChatThread>>) ?? model<IChatThread>('ChatThread', chatThreadSchema)

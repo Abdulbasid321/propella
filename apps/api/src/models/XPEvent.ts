@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose'
+import mongoose, { Schema, model, Document, Types } from 'mongoose'
 
 export type XPSource =
   | 'study_session'
@@ -54,4 +54,4 @@ const xpEventSchema = new Schema<IXPEvent>(
   { timestamps: false },
 )
 
-export const XPEventModel = model<IXPEvent>('XPEvent', xpEventSchema)
+export const XPEventModel = (mongoose.models['XPEvent'] as ReturnType<typeof model<IXPEvent>>) ?? model<IXPEvent>('XPEvent', xpEventSchema)

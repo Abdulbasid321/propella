@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose'
+import mongoose, { Schema, model, Document, Types } from 'mongoose'
 
 export interface IStudySession extends Document {
   _id: Types.ObjectId
@@ -49,4 +49,4 @@ const studySessionSchema = new Schema<IStudySession>(
 
 studySessionSchema.index({ userId: 1, startedAt: -1 })
 
-export const StudySessionModel = model<IStudySession>('StudySession', studySessionSchema)
+export const StudySessionModel = (mongoose.models['StudySession'] as ReturnType<typeof model<IStudySession>>) ?? model<IStudySession>('StudySession', studySessionSchema)

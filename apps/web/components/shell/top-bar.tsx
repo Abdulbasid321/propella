@@ -18,13 +18,11 @@ export function TopBar({ title }: TopBarProps) {
 
   return (
     <header
+      className="hidden md:flex items-center justify-between"
       style={{
         height: 56,
         backgroundColor: 'var(--color-paper)',
         borderBottom: '1px solid var(--color-rule)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
         paddingLeft: 32,
         paddingRight: 24,
         flexShrink: 0,

@@ -1,13 +1,16 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
+import { LogOut } from 'lucide-react'
 import { api } from '@/lib/api-client'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { SignOutDialog } from '@/components/auth/sign-out-dialog'
 
 type TabId = 'profile' | 'exam' | 'notifications' | 'plan' | 'privacy'
 
@@ -491,7 +494,20 @@ function PrivacyTab() {
 }
 
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState<TabId>('profile')
+  const searchParams = useSearchParams()
+  const user = useAuthStore((s) => s.user)
+  const [signOutOpen, setSignOutOpen] = useState(false)
+
+  const tabParam = searchParams.get('tab') as TabId | null
+  const [activeTab, setActiveTab] = useState<TabId>(
+    tabParam && TABS.some((t) => t.id === tabParam) ? tabParam : 'profile',
+  )
+
+  useEffect(() => {
+    if (tabParam && TABS.some((t) => t.id === tabParam)) {
+      setActiveTab(tabParam)
+    }
+  }, [tabParam])
 
   const tabContent: Record<TabId, React.ReactNode> = {
     profile: <ProfileTab />,
@@ -552,6 +568,56 @@ export default function SettingsPage() {
 
       {/* Tab content */}
       {tabContent[activeTab]}
+
+      {/* Sign out — mobile surface */}
+      <div style={{ marginTop: 32 }}>
+        <button
+          onClick={() => setSignOutOpen(true)}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 8,
+            width: '100%',
+            padding: '14px 0',
+            backgroundColor: 'var(--color-card)',
+            border: '1px solid var(--color-danger)',
+            borderRadius: 'var(--radius-sm)',
+            color: 'var(--color-danger)',
+            fontFamily: 'var(--font-sans)',
+            fontSize: 14,
+            fontWeight: 500,
+            cursor: 'pointer',
+          }}
+        >
+          <LogOut size={16} strokeWidth={1.5} />
+          Sign out
+        </button>
+        <p
+          style={{
+            fontFamily: 'var(--font-sans)',
+            fontSize: 12,
+            color: 'var(--color-ink-3)',
+            textAlign: 'center',
+            marginTop: 12,
+          }}
+        >
+          Signed in as {user?.email}
+        </p>
+        <p
+          style={{
+            fontFamily: 'var(--font-sans)',
+            fontSize: 12,
+            color: 'var(--color-ink-3)',
+            textAlign: 'center',
+            marginTop: 4,
+          }}
+        >
+          Propella v1.0.0
+        </p>
+      </div>
+
+      <SignOutDialog open={signOutOpen} onClose={() => setSignOutOpen(false)} />
     </div>
   )
 }

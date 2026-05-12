@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose'
+import mongoose, { Schema, model, Document, Types } from 'mongoose'
 
 export interface IExamSubject {
   subjectId: string
@@ -83,4 +83,4 @@ const examProfileSchema = new Schema<IExamProfile>(
   { timestamps: true },
 )
 
-export const ExamProfileModel = model<IExamProfile>('ExamProfile', examProfileSchema)
+export const ExamProfileModel = (mongoose.models['ExamProfile'] as ReturnType<typeof model<IExamProfile>>) ?? model<IExamProfile>('ExamProfile', examProfileSchema)

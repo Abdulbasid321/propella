@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose'
+import mongoose, { Schema, model, Document, Types } from 'mongoose'
 
 export interface ISm2 {
   easeFactor: number
@@ -106,4 +106,4 @@ const roadmapSchema = new Schema<IRoadmap>(
 roadmapSchema.index({ userId: 1 }, { unique: true })
 roadmapSchema.index({ 'nodes.plannedStartDate': 1 })
 
-export const RoadmapModel = model<IRoadmap>('Roadmap', roadmapSchema)
+export const RoadmapModel = (mongoose.models['Roadmap'] as ReturnType<typeof model<IRoadmap>>) ?? model<IRoadmap>('Roadmap', roadmapSchema)
