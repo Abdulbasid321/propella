@@ -1245,6 +1245,28 @@ Each ticks with a `Check` icon when done. When all four are done, auto-navigate 
 - No sidebar. Bottom tab bar fixed, 64px tall, 5 items. Center item ("Study") is the primary CTA and is visually larger — a 56px round button raised 12px above the bar with accent bg, white `Compass` icon.
 - Top bar: 48px, logo left, streak + bell right.
 
+### 6.4.1 Mobile "Tools" hub
+
+**Bottom tab bar order:** Home (`Home` icon → /dashboard), Roadmap (`Compass` → /roadmap), Study CTA (raised 56px accent circle, white `Compass` icon → /study/new), Tools (`LayoutGrid` → opens Tools sheet), Profile (`User` → /settings).
+
+Quizzes is removed from the bar and moves into the Tools sheet. Most quiz starts happen from Roadmap and Dashboard anyway.
+
+**Tools sheet behavior:**
+- Tapping Tools opens a full-screen sheet sliding up from bottom, using Framer Motion: `y: '100%' → 0`, 280ms ease-out. Backdrop fades in to `rgba(0,0,0,0.4)`.
+- Sheet uses paper background, full height minus 48px top inset.
+- Top: a 36×4px rounded handle bar (paper-3 color), centered, 12px from top. Tapping or swiping down dismisses.
+- Below handle: "Tools" in Fraunces heading-lg left, close button (`X`, ink-3) right. Hairline bottom border.
+- Body: rows of min-height 64px. Each row: 40×40 icon box (paper-2 bg, radius-sm, Lucide icon 20px ink), name (Geist 500 16px ink) + description (body-sm ink-2), `ChevronRight` 18px ink-3. Hairline rule between rows (not on last).
+- Row order: `BookOpen` Planner / `ClipboardCheck` Quizzes / `FileText` Mocks / `Timer` Marathon / `Sparkles` AI Assistant / `TrendingUp` Progress / `Trophy` Leaderboard.
+- On navigate: dismiss sheet first, await 200ms, then push route. Prevents janky animation overlap.
+- Component: `components/shell/tools-sheet.tsx`, mounted at app layout level.
+
+**Tools tab active state:** active (ink color) when pathname is /planner, /quizzes, /quizzes/*, /mocks, /mocks/*, /marathon, /marathon/*, /assistant, /progress, or /leaderboard.
+
+**Swipe to dismiss:** Framer Motion `drag="y"` with `dragConstraints={{ top: 0 }}`. Dismiss if `offset.y > 100 || velocity.y > 500`. Tapping backdrop also dismisses.
+
+**Reduced motion:** falls back to instant open/close (no translate animation).
+
 ### 6.5 Dashboard (`app/(app)/dashboard/page.tsx`)
 
 Layout: a 12-column grid on lg, 1 column on mobile. NOT a uniform card wall. Some cards span 8 cols, some span 4. Asymmetric.
