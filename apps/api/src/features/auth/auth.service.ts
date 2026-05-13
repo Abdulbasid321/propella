@@ -8,6 +8,7 @@ import { StreakModel } from '../../models/Streak'
 import { env } from '../../config/env'
 import { logger } from '../../config/logger'
 import { AppError } from '../../middleware/error-handler'
+import { sendPasswordResetEmail } from '../../lib/email'
 
 const BCRYPT_ROUNDS = 12
 const ACCESS_TOKEN_TTL = '15m'
@@ -88,6 +89,25 @@ export async function getUserForRefresh(userId: string): Promise<Omit<IUser, 'pa
   return UserModel.findById(userId).lean() as Promise<Omit<IUser, 'passwordHash'> | null>
 }
 
+export async function resetPassword(token: string, newPassword: string): Promise<void> {
+  const hashedToken = crypto.createHash('sha256').update(token).digest('hex')
+
+  const user = await UserModel.findOne({
+    resetPasswordToken: hashedToken,
+    resetPasswordExpires: { $gt: new Date() },
+  }).select('+resetPasswordToken +resetPasswordExpires')
+
+  if (!user) {
+    throw new AppError(400, 'This reset link is invalid or has expired')
+  }
+
+  const newHash = await bcrypt.hash(newPassword, BCRYPT_ROUNDS)
+  await user.updateOne({
+    $set: { passwordHash: newHash },
+    $unset: { resetPasswordToken: '', resetPasswordExpires: '' },
+  })
+}
+
 export async function forgotPassword(email: string): Promise<void> {
   const user = await UserModel.findOne({ email }).select(
     '+resetPasswordToken +resetPasswordExpires',
@@ -107,11 +127,8 @@ export async function forgotPassword(email: string): Promise<void> {
 
   if (env.NODE_ENV !== 'production') {
     logger.info({ resetToken: rawToken, email }, 'Password reset token (dev only)')
-    return
   }
 
-  // In production, send via Resend
-  // The email integration is handled by a dedicated email service module.
-  // Import and call it here when implemented.
-  logger.info({ email }, 'Password reset email would be sent in production')
+  const resetUrl = `${env.FRONTEND_URL}/reset-password?token=${rawToken}`
+  await sendPasswordResetEmail(email, resetUrl)
 }
