@@ -1553,6 +1553,53 @@ Tabbed: Profile, Exam, Notifications, Plan, Privacy.
 
 Standard form-based pages. Each setting save is autosaved with a toast confirmation.
 
+### 6.16 Help & Support (`app/(app)/help/page.tsx`)
+
+A single static page. No search, no categories. Editorial layout, same constraints as the rest of the app.
+
+**Layout:** Single column, max-w-[680px], centered, px-6 py-12 md:py-16.
+
+**Top section — Contact:**
+- Heading (Fraunces display-md): "Help & support"
+- Subhead (body-lg ink-2, max-w-[520px]): "Most things in Propella are designed to explain themselves. If something doesn't, we want to hear about it."
+- 32px gap, then a contact card (full width, no shadow, 1px solid --color-rule, radius-md, p-6):
+  - **Row 1 — Email** (entire row is a `mailto:support@propella.app` link):
+    - Left: Lucide `Mail` icon (20px, ink-2) in 40×40 paper-2 square, radius-sm
+    - Center: "Email us" Geist 600 15px, below it "support@propella.app" body-sm ink-2
+    - Right: Lucide `ArrowUpRight` 16px ink-3
+  - Hairline divider (`--color-rule`)
+  - **Row 2 — Response time** (not a link):
+    - Left: Lucide `Clock` icon (20px, ink-2) in same square treatment
+    - Center: "Response time" Geist 600 15px, below it "Within 24 hours, Mon–Sat" body-sm ink-2
+    - No right arrow
+
+**FAQ section:**
+- 48px gap below contact card
+- Heading (Fraunces heading-lg): "Frequently asked"
+- 24px gap, then collapsible FAQ items using shadcn Accordion (`type="single"` collapsible, `defaultValue="item-0"`)
+- Styling: no card background, hairline dividers between items; trigger row question in Geist 500 16px ink, py-5 px-0, Lucide `Plus` 18px ink-3 on right that rotates 45° when expanded; content body-sm ink-2 leading-relaxed, pb-5 pr-8, max-w-[600px]
+
+**FAQ entries (exact, in order):**
+1. How is the roadmap generated? — "Propella reads the official JAMB, WAEC, or NECO syllabus for your selected subjects and lays out every topic between today and your exam date. Subjects you marked as weak get more time. Topics with higher historical exam weight are prioritized. The plan adapts after every quiz and study session — you'll never finish on the exact path you started on."
+2. Can I change my exam date or subjects later? — "Yes. Go to Settings → Exam profile. Changing your exam date triggers a roadmap regeneration. Changing your subjects regenerates the affected portion. Your XP, streaks, and quiz history are preserved."
+3. What happens if I miss a day? — "On the Free plan, you have one streak freeze per month — it applies automatically if you miss a day, so your streak stays intact. On Scholar, you get four freezes per month. If you're out of freezes, your streak resets to zero. Your roadmap and progress are not affected by missed days — only the streak counter."
+4. How does Propella generate quiz questions? — "We generate questions using Claude (the AI model) constrained strictly to your syllabus topic and the difficulty you select. Questions are not pulled from past papers — they're original, written in the style of the exam. We deduplicate against questions you've recently seen so you don't get the same one twice."
+5. Are the AI assistant's answers always correct? — "Mostly, but not always. The AI assistant is built on a model trained on a broad knowledge base and tuned for the Nigerian secondary school curriculum. If you spot an answer that conflicts with your textbook or class teacher, trust the textbook. Report the mistake using the feedback button below any assistant message."
+6. Can I use Propella offline? — "Partially. Once a topic's content loads, you can read it offline. Study sessions and the marathon timer work offline and sync when you reconnect. AI assistant, quiz generation, and mocks require an internet connection."
+7. How do I cancel my Scholar subscription? — "Settings → Plan & billing → Cancel subscription. You keep Scholar features until the end of your current billing period, then your account moves back to Free. Your data is not deleted."
+8. I found a bug or have a feature request. — "Email us at support@propella.app with as much detail as you can — what you were doing, what happened, and a screenshot if relevant. We read every message."
+
+**Bottom of page:**
+- 48px gap below last FAQ
+- Centered caption in ink-3 body-sm: "Propella v{appVersion} · Built in Nigeria"
+- `{appVersion}` read from `package.json` at build time via `NEXT_PUBLIC_APP_VERSION` (injected in `next.config.ts`)
+
+**Routing:** Authenticated only, `app/(app)/help/`. The sidebar "Help & support" menu item routes here.
+
+**Marketing footer:** Add "Support" link (`mailto:support@propella.app`) to the Legal column. No separate unauthenticated help page.
+
+**Mobile:** Same single-column layout; responsive padding (px-6 mobile, px-8 desktop) handles it automatically.
+
 ---
 
 ## 7. COPY VOICE & GLOSSARY

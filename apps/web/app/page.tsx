@@ -568,6 +568,7 @@ export default function HomePage() {
                 {[
                   { label: 'Privacy policy', href: '/privacy' },
                   { label: 'Terms of use', href: '/terms' },
+                  { label: 'Support', href: 'mailto:support@propella.app' },
                 ].map(({ label, href }) => (
                   <li key={label}>
                     <Link

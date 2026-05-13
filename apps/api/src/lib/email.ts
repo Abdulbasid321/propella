@@ -3,7 +3,7 @@ import { env } from '../config/env'
 import { logger } from '../config/logger'
 
 const resend = new Resend(env.RESEND_API_KEY || 're_placeholder')
-const FROM = 'Propella <noreply@propella.ng>'
+const FROM = 'Propella <onboarding@resend.dev>'
 
 function base(body: string): string {
   return `<!DOCTYPE html>
