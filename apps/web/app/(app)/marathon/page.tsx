@@ -146,7 +146,7 @@ export default function MarathonPage() {
   }
 
   return (
-    <div style={{ maxWidth: 720, margin: '0 auto' }}>
+    <div style={{ margin: '0 auto' }}>
       {/* Header */}
       <div style={{ marginBottom: 32 }}>
         <h1

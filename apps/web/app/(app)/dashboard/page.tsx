@@ -286,7 +286,7 @@ function XPRankCard({
       : 100
 
   return (
-    <Card className="lg:col-span-4">
+    <Card className="lg:col-span-6">
       <CardHeader className="mb-2">
         <p
           style={{
@@ -447,7 +447,7 @@ function PerformanceTrendCard({ scores }: { scores: DailyScore[] }) {
   }))
 
   return (
-    <Card className="lg:col-span-6">
+    <Card className="lg:col-span-7">
       <CardHeader>
         <CardTitle style={{ fontFamily: 'var(--font-sans)', fontWeight: 600 }}>Last 7 days</CardTitle>
       </CardHeader>
@@ -522,7 +522,7 @@ function UpcomingRevisionsCard({ revisions }: { revisions: UpcomingRevision[] })
   })
 
   return (
-    <Card className="lg:col-span-6">
+    <Card className="lg:col-span-5">
       <CardHeader>
         <CardTitle style={{ fontFamily: 'var(--font-sans)', fontWeight: 600 }}>Due for revision</CardTitle>
       </CardHeader>
@@ -577,7 +577,7 @@ function UpcomingRevisionsCard({ revisions }: { revisions: UpcomingRevision[] })
 // Exam readiness card
 function ExamReadinessCard({ readiness }: { readiness: number }) {
   return (
-    <Card className="lg:col-span-6">
+    <Card className="lg:col-span-12">
       <CardHeader>
         <CardTitle style={{ fontFamily: 'var(--font-sans)', fontWeight: 600 }}>Exam readiness</CardTitle>
       </CardHeader>

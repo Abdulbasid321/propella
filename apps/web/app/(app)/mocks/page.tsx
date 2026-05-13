@@ -93,7 +93,7 @@ export default function MocksPage() {
   }
 
   return (
-    <div style={{ maxWidth: 800, margin: '0 auto' }}>
+    <div style={{ margin: '0 auto' }}>
       {/* Header */}
       <div
         style={{

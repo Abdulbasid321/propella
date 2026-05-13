@@ -23,7 +23,7 @@ export function TopBar({ title }: TopBarProps) {
     <header
       className="hidden md:flex items-center justify-between"
       style={{
-        height: 56,
+        height: 65,
         backgroundColor: 'var(--color-paper)',
         borderBottom: '1px solid var(--color-rule)',
         paddingLeft: 32,

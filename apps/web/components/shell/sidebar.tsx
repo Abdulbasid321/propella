@@ -50,8 +50,8 @@ export function Sidebar() {
     <aside
       className="hidden md:flex flex-col"
       style={{
-        width: 260,
-        minWidth: 260,
+        width: 220,
+        minWidth: 220,
         flexShrink: 0,
         height: '100vh',
         position: 'sticky',

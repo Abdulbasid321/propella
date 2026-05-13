@@ -145,7 +145,7 @@ export default function LeaderboardPage() {
   const myInTop10 = myEntry ? myEntry.rank <= 10 : false
 
   return (
-    <div style={{ maxWidth: 720, margin: '0 auto' }}>
+    <div style={{ margin: '0 auto' }}>
       {/* Header */}
       <div style={{ marginBottom: 32 }}>
         <h1
