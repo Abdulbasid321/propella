@@ -107,6 +107,9 @@ export function ToolsSheet({ open, onClose }: ToolsSheetProps) {
           {/* Sheet */}
           <motion.div
             key="sheet"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Tools"
             variants={sheetVariants}
             initial="hidden"
             animate="visible"

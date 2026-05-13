@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { CalendarDays, BookOpen, FlaskConical, Zap, Check } from 'lucide-react'
+import { Compass, Sparkles, FileText, Timer, Check, CalendarDays } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
@@ -257,7 +257,7 @@ export default function HomePage() {
             <div className="md:grid md:grid-cols-2 md:col-span-2 md:divide-x divide-[var(--color-rule)]">
               {/* Adaptive roadmap */}
               <div className="py-8 md:pr-10">
-                <BookOpen
+                <Compass
                   size={20}
                   strokeWidth={1.5}
                   className="text-[var(--color-accent)] mb-4"
@@ -269,15 +269,14 @@ export default function HomePage() {
                   Adaptive roadmap
                 </h3>
                 <p className="text-[15px] leading-[1.6] text-[var(--color-ink-2)]">
-                  A personalised topic-by-topic plan built from the official JAMB, WAEC, and NECO
-                  syllabi. Adjusts automatically as your exam date approaches and your performance
-                  data grows.
+                  Your roadmap rebuilds itself after every quiz and every missed session.
+                  The plan you started with is a starting point, not a contract.
                 </p>
               </div>
 
               {/* AI study companion */}
               <div className="py-8 md:pl-10">
-                <Zap
+                <Sparkles
                   size={20}
                   strokeWidth={1.5}
                   className="text-[var(--color-accent)] mb-4"
@@ -289,9 +288,9 @@ export default function HomePage() {
                   AI study companion
                 </h3>
                 <p className="text-[15px] leading-[1.6] text-[var(--color-ink-2)]">
-                  Ask any question about a topic and get a clear, syllabus-grounded answer. Not a
-                  general chatbot — a focused tutor that stays within the scope of what will
-                  actually be examined.
+                  Ask anything in your syllabus and get an explanation written for the
+                  Nigerian curriculum, not a generic answer. Concepts, worked examples,
+                  and practice questions in one reply.
                 </p>
               </div>
             </div>
@@ -305,7 +304,7 @@ export default function HomePage() {
             <div className="md:grid md:grid-cols-2 md:col-span-2 md:divide-x divide-[var(--color-rule)]">
               {/* Mock exams */}
               <div className="py-8 md:pr-10">
-                <FlaskConical
+                <FileText
                   size={20}
                   strokeWidth={1.5}
                   className="text-[var(--color-accent)] mb-4"
@@ -314,18 +313,18 @@ export default function HomePage() {
                   className="text-[18px] leading-[1.3] tracking-[-0.01em] text-[var(--color-ink)] mb-2"
                   style={{ fontFamily: 'var(--font-display)' }}
                 >
-                  Mock exams
+                  Mock exams from real syllabi
                 </h3>
                 <p className="text-[15px] leading-[1.6] text-[var(--color-ink-2)]">
-                  Full-length timed practice papers formatted like the real exam. Detailed score
-                  breakdowns by topic help you identify exactly where to focus your remaining study
-                  time.
+                  Take full-length mocks structured like the actual paper, generated from
+                  your specific subject combination. Get a marked breakdown, not just a
+                  score.
                 </p>
               </div>
 
               {/* Marathon mode */}
               <div className="py-8 md:pl-10">
-                <CalendarDays
+                <Timer
                   size={20}
                   strokeWidth={1.5}
                   className="text-[var(--color-accent)] mb-4"
@@ -337,9 +336,8 @@ export default function HomePage() {
                   Marathon mode
                 </h3>
                 <p className="text-[15px] leading-[1.6] text-[var(--color-ink-2)]">
-                  A long-form drilling session for when you have hours to spare — or when an exam
-                  is days away. Works through your overdue reviews and weakest topics in one
-                  extended session.
+                  Lock in for a 30, 60, or 120-minute focused run with built-in breaks.
+                  Earn double XP. Use the long stretch you actually have on a Saturday.
                 </p>
               </div>
             </div>
@@ -393,11 +391,11 @@ export default function HomePage() {
 
               <ul className="space-y-3 mb-8">
                 {[
-                  'Full access to the official syllabi',
-                  'Personalised study roadmap',
-                  'Up to 3 active subjects',
-                  '20 AI assistant messages per day',
-                  'Basic progress tracking',
+                  'Full roadmap for one exam',
+                  'Up to 20 AI assistant messages per day',
+                  '5 quizzes per day, unlimited mocks per month',
+                  '1 streak freeze per month',
+                  'All core features',
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-3">
                     <Check
@@ -411,21 +409,17 @@ export default function HomePage() {
               </ul>
 
               <Button variant="secondary" size="lg" className="w-full" asChild>
-                <Link href="/signup">Start for free</Link>
+                <Link href="/signup">Start free</Link>
               </Button>
             </div>
 
-            {/* Pro plan */}
-            <div className="border-2 border-[var(--color-accent)] rounded-[var(--radius-md)] p-8 bg-[var(--color-card)] relative">
-              <Badge variant="accent" className="absolute top-6 right-6">
-                Most popular
-              </Badge>
-
+            {/* Scholar plan */}
+            <div className="border border-[var(--color-rule)] rounded-[var(--radius-md)] p-8 bg-[var(--color-card)]">
               <div className="mb-6">
                 <p
-                  className="text-[11px] font-mono font-medium tracking-[0.12em] uppercase text-[var(--color-accent)] mb-3"
+                  className="text-[11px] font-mono font-medium tracking-[0.12em] uppercase text-[var(--color-ink-3)] mb-3"
                 >
-                  Pro
+                  Scholar
                 </p>
                 <div className="flex items-baseline gap-1 mb-2">
                   <span
@@ -437,7 +431,7 @@ export default function HomePage() {
                   <span className="text-[14px] text-[var(--color-ink-3)]">/month</span>
                 </div>
                 <p className="text-[14px] text-[var(--color-ink-3)]">
-                  Or ₦18,000/year — two months free.
+                  ₦18,000/year (40% off)
                 </p>
               </div>
 
@@ -446,12 +440,12 @@ export default function HomePage() {
               <ul className="space-y-3 mb-8">
                 {[
                   'Everything in Free',
-                  'Unlimited subjects',
-                  'Unlimited AI assistant messages',
-                  'Full mock exam library with scoring',
-                  'Marathon mode',
-                  'Detailed mastery analytics',
-                  'Priority support',
+                  'Unlimited AI assistant',
+                  'Unlimited quizzes',
+                  'Advanced analytics & weakness breakdown',
+                  '4 streak freezes per month',
+                  'Marathon mode with 50-min pomodoros',
+                  'Priority access to new features',
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-3">
                     <Check
@@ -465,7 +459,7 @@ export default function HomePage() {
               </ul>
 
               <Button variant="accent" size="lg" className="w-full" asChild>
-                <Link href="/signup">Start studying</Link>
+                <Link href="/signup">Start free, upgrade anytime</Link>
               </Button>
             </div>
           </div>
@@ -489,9 +483,8 @@ export default function HomePage() {
               Three months to exam day. That&apos;s twelve weeks. That&apos;s enough.
             </h2>
             <p className="text-[17px] leading-[1.6] text-[var(--color-ink-2)] mb-8 max-w-[480px]">
-              Candidates who finish with structured preparation outperform those who study harder
-              but without a plan. Start today. The syllabus is already mapped. Your roadmap takes
-              two minutes to set up.
+              The students who pass aren&apos;t smarter. They started earlier and they came
+              back to every topic until it was theirs. Start now.
             </p>
             <Button variant="accent" size="lg" asChild>
               <Link href="/signup">Build my roadmap</Link>

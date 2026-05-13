@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express'
-import type { SignupInput, LoginInput, ForgotPasswordInput } from '@propella/shared'
+import type { SignupInput, LoginInput, ForgotPasswordInput, ResetPasswordInput } from '@propella/shared'
 import * as authService from './auth.service'
 import { env } from '../../config/env'
 import { AppError } from '../../middleware/error-handler'
@@ -163,6 +163,19 @@ export async function forgotPassword(
     res.status(200).json({
       data: { message: 'If that email is registered, a reset link has been sent' },
     })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export async function resetPassword(
+  req: Request<object, object, ResetPasswordInput>,
+  res: Response,
+  next: NextFunction,
+): Promise<void> {
+  try {
+    await authService.resetPassword(req.body.token, req.body.password)
+    res.status(200).json({ data: { message: 'Password reset successfully' } })
   } catch (err) {
     next(err)
   }
