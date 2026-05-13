@@ -96,7 +96,7 @@ export default function SignupPage() {
             className="text-[22px] font-semibold text-[var(--color-ink)] leading-[1.3] mb-1"
             style={{ fontFamily: 'var(--font-display)' }}
           >
-            Create your account
+            Create your accountpnpm dev
           </h1>
           <p className="text-[13px] text-[var(--color-ink-2)]">
             Five minutes to set up. Then we build your roadmap.
