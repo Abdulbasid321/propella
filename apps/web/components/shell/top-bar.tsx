@@ -3,6 +3,8 @@ import { Flame, Bell, Sun, Moon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/lib/stores/auth-store'
+import { useStreakXP } from '@/lib/hooks/use-streak-xp'
+import { NumberCounter } from '@/components/common/number-counter'
 
 interface TopBarProps {
   title?: string
@@ -11,6 +13,7 @@ interface TopBarProps {
 export function TopBar({ title }: TopBarProps) {
   const { resolvedTheme, setTheme } = useTheme()
   const user = useAuthStore((s) => s.user)
+  const { streak, xp } = useStreakXP()
 
   function toggleTheme() {
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
@@ -50,30 +53,18 @@ export function TopBar({ title }: TopBarProps) {
         {/* Streak */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <Flame size={16} strokeWidth={1.5} style={{ color: 'var(--color-accent)' }} />
-          <span
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 18,
-              fontWeight: 500,
-              color: 'var(--color-ink)',
-              fontVariantNumeric: 'tabular-nums',
-            }}
-          >
-            —
-          </span>
+          <NumberCounter
+            value={streak}
+            className="text-[18px] font-medium text-[var(--color-ink)]"
+          />
         </div>
 
         {/* XP */}
-        <span
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: 11,
-            color: 'var(--color-ink-3)',
-            letterSpacing: '0.04em',
-          }}
-        >
-          {user ? '— XP' : '— XP'}
-        </span>
+        <NumberCounter
+          value={xp}
+          suffix=" XP"
+          className="font-mono text-[11px] text-[var(--color-ink-3)] tracking-[0.04em]"
+        />
 
         {/* Notification bell */}
         <Button variant="ghost" size="sm" className="p-1.5 h-auto" aria-label="Notifications">

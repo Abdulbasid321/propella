@@ -1,18 +1,23 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useTheme } from 'next-themes'
 import { Logo } from '@/components/common/logo'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils/cn'
 
 export function StickyNav() {
   const [scrolled, setScrolled] = useState(false)
+  const { resolvedTheme } = useTheme()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  const glassBg =
+    resolvedTheme === 'dark' ? 'rgba(20,19,15,0.85)' : 'rgba(251,249,244,0.78)'
 
   return (
     <header
@@ -24,7 +29,7 @@ export function StickyNav() {
         scrolled
           ? {
               backdropFilter: 'blur(12px) saturate(120%)',
-              backgroundColor: 'rgba(251,249,244,0.78)',
+              backgroundColor: glassBg,
             }
           : undefined
       }
