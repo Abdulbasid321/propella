@@ -1792,3 +1792,202 @@ The whole product looks like Headway and Readwise had a deliberate, serious chil
 ---
 
 END OF SPECIFICATION.
+
+---
+
+## 15. COLOR TOKEN REFERENCE (Aubergine — current)
+
+The accent color system was updated in Update Batch 01. The original ink-red has been replaced with a **warm aubergine** that is academically serious, clearly distinct from danger red, and holds up in both light and dark themes.
+
+### Light theme
+```css
+--color-accent:       #6E3A5F;   /* Warm aubergine — primary brand accent */
+--color-accent-2:     #56294A;   /* Hover/pressed — deeper */
+--color-accent-tint:  #F2E8EE;   /* Background tint for accent-tinted surfaces */
+```
+
+### Dark theme
+```css
+--color-accent:       #B07A9D;   /* Lifted aubergine for dark surfaces */
+--color-accent-2:     #99668A;   /* Hover/pressed in dark */
+--color-accent-tint:  #2A1E25;   /* Tint surface in dark */
+```
+
+### Why aubergine
+- `#4F46E5` (indigo) — rejected. The AI-SaaS default.
+- `#6B21A8` (royal violet) — rejected. Too vivid, too festive.
+- `#6E3A5F` (warm aubergine) — chosen. Deep, restrained, sits naturally next to the warm paper background, holds up in both themes, clearly distinct from danger (`#A82F2F`).
+
+### Contrast
+- Light: aubergine on paper background ~7.2:1 (WCAG AAA)
+- Dark: aubergine on dark paper ~5.1:1 (WCAG AA)
+
+### Downstream subject hues updated
+Two subject hues were too close to the new accent and were shifted:
+- `--color-subj-literature`: `#5A3F8E` → `#3F5A8E` (steel blue)
+- `--color-subj-government`: `#8E3F5A` → `#7F4A35` (clay brown)
+
+### Danger stays unchanged
+`--color-danger: #A82F2F` is NOT modified. Now that accent and danger are clearly differentiated by hue (purple vs red), they are properly distinguishable — an improvement over the previous state where both were red.
+
+### Favicon
+`app/icon.tsx` generates the favicon dynamically using `ImageResponse` with the "P" wordmark on the `#6E3A5F` background. This overrides the static `favicon.ico`.
+
+---
+
+## 16. NOTIFICATIONS SYSTEM
+
+### Overview
+A full in-app notification system. Every reminder and event in the system writes a `Notification` record. The frontend polls for the unread count (60s interval) and renders a dropdown panel on desktop and a full-screen sheet on mobile.
+
+### Backend model — `apps/api/src/models/Notification.ts`
+```ts
+{
+  _id: ObjectId,
+  userId: ObjectId (indexed),
+  type: NotificationType,         // closed set — see below
+  title: string,                  // max 80 chars
+  body: string,                   // max 200 chars
+  deeplink: string | null,        // resolved path with IDs substituted
+  metadata: Record<string, any>,  // arbitrary related IDs
+  readAt: Date | null,
+  createdAt: Date,
+  expiresAt: Date | null          // auto-removed via TTL index
+}
+```
+
+Indexes: `{ userId, createdAt: -1 }` (hot path), `{ userId, readAt }` (unread count), `{ expiresAt }` TTL.
+
+### Notification types (closed set for MVP)
+| Type slug | Icon | Icon color | Deep link |
+|---|---|---|---|
+| `study_reminder` | Bell | ink-2 | /dashboard |
+| `revision_due` | RefreshCcw | accent | /roadmap/[topicId] |
+| `streak_warning` | Flame | warning | /dashboard |
+| `streak_milestone` | Trophy | accent | /dashboard |
+| `mock_available` | FileText | ink-2 | /mocks |
+| `quiz_result` | ClipboardCheck | success | /quizzes/[quizId]/results |
+| `topic_unlocked` | Compass | accent | /roadmap/[topicId] |
+| `rank_up` | Trophy | accent | /progress |
+| `badge_earned` | Award | accent | /progress |
+| `weekly_review` | TrendingUp | ink-2 | /progress |
+| `system` | Info | ink-2 | varies |
+| `plan_change` | CreditCard | ink-2 | /settings?tab=plan |
+
+### Backend routes — `GET|PATCH|DELETE /api/notifications`
+```
+GET    /api/notifications              List (paginated, cursor-based)
+GET    /api/notifications/unread-count { count: number }
+PATCH  /api/notifications/:id/read     Mark single read
+PATCH  /api/notifications/read-all     Mark all read
+DELETE /api/notifications/:id          Delete single
+```
+
+### `notify()` helper — `apps/api/src/features/notifications/notification.service.ts`
+All event-driven notifications flow through `notify(userId, type, data)`. **Anti-flood built in:** before inserting, checks if a notification of the same type + same `metadata.topicId` or `metadata.quizId` was created within the last 30 minutes. If so, suppresses. This is enforced in the helper, not at call sites.
+
+Triggers:
+- Scheduler: every reminder sent also writes a Notification
+- Quiz submit: mocks and high-score (80%+) quizzes
+- Rank up: after every XP award in `gamification.service.ts`
+- Streak milestone: days 7, 14, 30, 60, 100 in `sessions.service.ts`
+- Topic unlocked: locked → ready transition in `roadmap.service.ts`
+
+### Frontend components — `apps/web/components/notifications/`
+- `NotificationBell.tsx` — bell button with animated unread badge; decides desktop vs mobile on click
+- `NotificationPanel.tsx` — desktop dropdown (400px wide, 520px max-height, sticky header/footer)
+- `NotificationSheet.tsx` — mobile full-screen slide-in from right (Framer Motion)
+- `NotificationRow.tsx` — shared row: icon block + content + unread dot
+- `NotificationEmpty.tsx` — BellOff empty state
+- `NotificationSkeleton.tsx` — 5 pulse skeleton rows
+
+### Frontend hooks — `apps/web/lib/hooks/`
+- `use-notifications.ts` — listing query, staleTime 30s
+- `use-unread-count.ts` — polls every 60s when tab visible
+- `use-mark-read.ts` — optimistic: removes unread dot, decrements badge
+- `use-mark-all-read.ts` — optimistic: zeros everything
+
+### TanStack Query keys
+- `["notifications", "list"]`
+- `["notifications", "unread-count"]`
+
+### Design spec (desktop panel)
+- Width: 400px, max-height: 520px
+- Anchored: `right: 0`, `top: calc(100% + 8px)` from bell
+- Unread rows: `2px` left border in `--color-accent`, `bg: --color-accent-tint` at 50%
+- Unread dot: 6px circle, accent, centered right
+- Badge: `min-w-[16px]`, `h-[16px]`, accent bg, white mono text, "9+" if count > 9
+
+---
+
+## 17. INTERNATIONALIZATION
+
+### Library
+**next-intl v3** (App Router + Server Components, locale-prefixed routing).
+
+### Supported locales
+```ts
+export const locales = ["en", "yo", "ha", "ig"] as const
+export const defaultLocale = "en"
+```
+Native labels: English, Yorùbá, Hausa, Igbo. No flag emojis — flags map to countries, not languages.
+
+### Routing
+Locale-prefixed always: `/en/dashboard`, `/yo/dashboard`, etc. `/dashboard` redirects to `/en/dashboard`. Middleware in `apps/web/middleware.ts`.
+
+### File structure
+```
+apps/web/
+├── app/[locale]/           ← ALL routes nested here
+│   ├── (app)/
+│   ├── (auth)/
+│   ├── (marathon)/
+│   ├── (marketing)/
+│   ├── (onboarding)/
+│   ├── layout.tsx          ← Locale-aware, with NextIntlClientProvider
+│   ├── not-found.tsx
+│   └── page.tsx
+├── lib/i18n/
+│   ├── locales.ts          ← Locale constants
+│   ├── request.ts          ← next-intl getRequestConfig
+│   └── navigation.ts       ← Typed Link, useRouter wrappers
+├── messages/
+│   ├── en.json             ← Canonical, hand-written
+│   ├── yo.json             ← AI-translated (run pnpm translate)
+│   ├── ha.json             ← AI-translated
+│   └── ig.json             ← AI-translated
+└── scripts/
+    └── translate.ts        ← Run manually: pnpm translate
+```
+
+### Font handling (critical for Yoruba/Igbo)
+Geist lacks full coverage for Yoruba dotted vowels (`ẹ`, `ọ`, `ṣ`) and combining tone marks. **Noto Sans** is added as fallback in the font stack. For `yo` and `ig` locales, Noto Sans leads:
+```css
+html[data-locale="yo"],
+html[data-locale="ig"] {
+  --font-sans: var(--font-noto-sans), var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+}
+```
+The `[locale]/layout.tsx` sets `data-locale` on `<html>` and loads Noto Sans + Noto Serif at weights 400, 500, 600.
+
+### Translation script
+`scripts/translate.ts` — run `pnpm translate`. Reads `messages/en.json`, calls Claude Sonnet per namespace, validates structure, writes `{locale}.json`. Manual overrides can be placed in `messages/{locale}.fixed.json` (entire namespaces) and are preserved across runs. NOT run at build time — translations are committed to the repo.
+
+### Hard rules for string handling
+1. Never concatenate translated strings — use ICU placeholders: `{days} days to {exam}`
+2. Plurals use ICU MessageFormat syntax: `{days, plural, =1 {1 day} other {# days}}`
+3. Dates/numbers: use next-intl's `useFormatter` — never hand-format
+4. Digits (XP count, streak number) don't need translation — only the surrounding units do
+
+### Locale switcher placement
+- **Settings → Profile**: select dropdown with native labels
+- **Mobile Tools sheet**: Language row at the bottom, expands inline list
+- **Desktop sidebar user menu**: Globe icon item above the divider, opens popover
+
+### Quality acknowledgement
+In Settings → Language, a note in body-sm ink-3 explains that translations are AI-generated and may have errors. Link to `mailto:support@propella.app?subject=Translation%20report...` for user reports. This note is itself translated in each locale file.
+
+### What NOT to translate
+- User-generated content (chat messages, notes, quiz answers)
+- Subject names and scientific terms ("Photosynthesis", "Quadratic Equations") — students need these in English to match exam papers
+- JAMB, WAEC, NECO, XP, PDF, AI — kept in English across all locales
