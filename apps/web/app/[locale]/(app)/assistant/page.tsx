@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Send, Plus } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { useTranslations } from 'next-intl'
 import { api, getAccessToken } from '@/lib/api-client'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -162,6 +163,7 @@ function StreamingBubble({ text }: { text: string }) {
 
 export default function AssistantPage() {
   const queryClient = useQueryClient()
+  const t = useTranslations('assistant')
   const [activeThreadId, setActiveThreadId] = useState<string | null>(null)
   const [inputValue, setInputValue] = useState('')
   const [isStreaming, setIsStreaming] = useState(false)
@@ -276,7 +278,8 @@ export default function AssistantPage() {
     <div
       style={{
         display: 'flex',
-        height: 'calc(100vh - 80px)',
+        height: 'calc(100vh - 65px)',
+        margin: '-32px',
         gap: 0,
         overflow: 'hidden',
       }}
@@ -301,7 +304,7 @@ export default function AssistantPage() {
           style={{ marginBottom: 12, width: '100%', justifyContent: 'flex-start', gap: 8 }}
         >
           <Plus size={14} strokeWidth={1.5} />
-          New conversation
+          {t('newThread')}
         </Button>
 
         {threadsLoading ? (
@@ -439,7 +442,7 @@ export default function AssistantPage() {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask anything from your syllabus..."
+            placeholder={t('placeholder')}
             rows={1}
             disabled={isStreaming}
             style={{
@@ -455,7 +458,7 @@ export default function AssistantPage() {
               outline: 'none',
               lineHeight: 1.5,
               maxHeight: 120,
-              overflow: 'auto',
+              overflow: 'hidden',
             }}
           />
           <Button
