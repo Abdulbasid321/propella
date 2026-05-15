@@ -12,6 +12,7 @@ import {
   parseISO,
 } from 'date-fns'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useRoadmap } from '@/lib/hooks/use-roadmap'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -35,6 +36,7 @@ const DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
 export default function PlannerPage() {
   const router = useRouter()
+  const t = useTranslations('planner')
   const [weekStart, setWeekStart] = useState<Date>(() =>
     startOfWeek(new Date(), { weekStartsOn: 1 }),
   )
@@ -80,7 +82,7 @@ export default function PlannerPage() {
               marginBottom: 4,
             }}
           >
-            Planner
+            {t('title')}
           </h1>
           <p
             style={{
@@ -304,7 +306,7 @@ export default function PlannerPage() {
                             marginTop: 2,
                           }}
                         >
-                          {node.estimatedMinutes ?? 30} min
+                          {t('duration', { minutes: node.estimatedMinutes ?? 30 })}
                         </div>
                       </button>
                     ))
@@ -388,7 +390,7 @@ export default function PlannerPage() {
                 marginBottom: 20,
               }}
             >
-              Estimated {selectedNode.estimatedMinutes ?? 30} min
+              {t('duration', { minutes: selectedNode.estimatedMinutes ?? 30 })}
               {' · '}
               Mastery {selectedNode.mastery}%
             </p>

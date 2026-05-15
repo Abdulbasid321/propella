@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { ForgotPasswordSchema, type ForgotPasswordInput } from '@propella/shared'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -12,6 +13,7 @@ import { Button } from '@/components/ui/button'
 import { api } from '@/lib/api-client'
 
 export default function ForgotPasswordPage() {
+  const t = useTranslations('auth')
   const [submitted, setSubmitted] = useState(false)
   const [serverError, setServerError] = useState<string | null>(null)
 
@@ -53,7 +55,7 @@ export default function ForgotPasswordPage() {
           <div>
             <div className="bg-[var(--color-paper-2)] border border-[var(--color-rule)] rounded-[var(--radius-md)] px-4 py-4">
               <p className="text-[14px] text-[var(--color-ink)] leading-[1.5]">
-                If that email is registered, you&apos;ll receive a link shortly.
+                {t('resetLinkSent')}
               </p>
             </div>
             <p className="mt-6 text-center text-[13px] text-[var(--color-ink-2)]">
@@ -95,7 +97,7 @@ export default function ForgotPasswordPage() {
               className="w-full"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Sending...' : 'Send reset link'}
+              {isSubmitting ? `${t('sendResetLink')}...` : t('sendResetLink')}
             </Button>
 
             <p className="text-center text-[13px] text-[var(--color-ink-2)]">

@@ -26,8 +26,11 @@
 
   /* Functional */
   --color-success: #2F6B3F;
+  --color-success-tint: #E8F5EC;
   --color-warning: #B87A1F;
+  --color-warning-tint: #FDF3E3;
   --color-danger: #A82F2F;
+  --color-danger-tint: #FDE8E8;
 
   /* Subject hues */
   --color-subj-english: #3F5B7F;
@@ -72,6 +75,9 @@
   --color-accent: #B07A9D;
   --color-accent-2: #99668A;
   --color-accent-tint: #2A1E25;
+  --color-success-tint: #1A2E1E;
+  --color-warning-tint: #2E2210;
+  --color-danger-tint: #2E1414;
 }
 
 * {

@@ -45,6 +45,7 @@ function buildAuthUser(user: {
   onboardingStep: number
   theme: 'system' | 'light' | 'dark'
   timezone: string
+  locale?: 'en' | 'yo' | 'ha' | 'ig'
   avatarUrl?: string
 }): AuthUser {
   const result: AuthUser = {
@@ -56,6 +57,7 @@ function buildAuthUser(user: {
     onboardingStep: user.onboardingStep,
     theme: user.theme,
     timezone: user.timezone,
+    locale: user.locale ?? 'en',
   }
   if (user.avatarUrl !== undefined) result.avatarUrl = user.avatarUrl
   return result

@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { api } from '@/lib/api-client'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -91,6 +92,7 @@ function SubjectChip({
 
 export default function MarathonPage() {
   const router = useRouter()
+  const t = useTranslations('marathon')
   const user = useAuthStore((s) => s.user)
   const isScholar = user?.plan === 'scholar'
 
@@ -314,7 +316,7 @@ export default function MarathonPage() {
                       color: 'var(--color-ink)',
                     }}
                   >
-                    {run.pomodorosCompleted} pomodoro{run.pomodorosCompleted !== 1 ? 's' : ''} completed
+                    {t('pomodorosCompleted', { count: run.pomodorosCompleted })}
                   </p>
                   <p
                     style={{

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { differenceInDays, differenceInWeeks } from 'date-fns'
 import { Check } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/components/ui/toast'
@@ -185,10 +186,11 @@ function Step1({
   value: ExamType | null
   onChange: (v: ExamType) => void
 }) {
+  const t = useTranslations('onboarding')
   return (
     <>
       <StepHeading
-        title="Which exam are you preparing for?"
+        title={t('examType')}
         sub="We will tailor your roadmap to the exact syllabus and marking scheme."
       />
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -731,6 +733,7 @@ function Step5({
   value: string
   onChange: (v: string) => void
 }) {
+  const t = useTranslations('onboarding')
   const today = new Date()
   const todayStr = today.toISOString().split('T')[0] ?? ''
 
@@ -761,7 +764,7 @@ function Step5({
   return (
     <>
       <StepHeading
-        title="When is your exam?"
+        title={t('examDate')}
         sub="Your roadmap is built backwards from this date."
       />
       <div style={{ marginBottom: 20 }}>
@@ -1041,6 +1044,7 @@ function Step7Generating({
 // ─── Main Wizard ──────────────────────────────────────────────────────────────
 
 export default function OnboardingPage() {
+  const tCommon = useTranslations('common')
   const router = useRouter()
   const { toast } = useToast()
   const setUser = useAuthStore((s) => s.setUser)
@@ -1315,7 +1319,7 @@ export default function OnboardingPage() {
               ? 'Saving...'
               : currentStep === VISIBLE_STEPS
               ? 'Build my roadmap'
-              : 'Continue'}
+              : tCommon('continue')}
           </Button>
 
           {currentStep > 1 && (
@@ -1326,7 +1330,7 @@ export default function OnboardingPage() {
               disabled={isSubmitting}
               style={{ width: '100%' }}
             >
-              Back
+              {tCommon('back')}
             </Button>
           )}
         </div>

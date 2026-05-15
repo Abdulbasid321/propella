@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { api } from '@/lib/api-client'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -69,6 +70,7 @@ function QuestionReviewItem({
   result: AnswerResult
   index: number
 }) {
+  const t = useTranslations('quiz')
   const [expanded, setExpanded] = useState(false)
 
   return (
@@ -246,7 +248,7 @@ function QuestionReviewItem({
                 letterSpacing: '0.05em',
               }}
             >
-              Explanation
+              {t('explanation')}
             </p>
             <p
               style={{
@@ -269,6 +271,7 @@ function QuestionReviewItem({
 export default function QuizResultsPage() {
   const params = useParams()
   const router = useRouter()
+  const t = useTranslations('quiz')
   const quizId = params.quizId as string
   const attemptId = params.attemptId as string
 
@@ -337,7 +340,7 @@ export default function QuizResultsPage() {
           {error ?? 'Results not found'}
         </p>
         <Button variant="secondary" onClick={() => router.push('/quizzes')}>
-          Back to quizzes
+          {t('backToQuizzes')}
         </Button>
       </div>
     )
@@ -378,7 +381,7 @@ export default function QuizResultsPage() {
             marginBottom: 12,
           }}
         >
-          {attempt.score}%
+          {t('score', { score: attempt.score })}
         </p>
         <p
           style={{
@@ -394,7 +397,7 @@ export default function QuizResultsPage() {
 
         {attempt.xpAwarded > 0 && (
           <div style={{ display: 'inline-flex', justifyContent: 'center' }}>
-            <Badge variant="accent">+{attempt.xpAwarded} XP earned</Badge>
+            <Badge variant="accent">{t('xpEarned', { xp: attempt.xpAwarded })}</Badge>
           </div>
         )}
       </div>

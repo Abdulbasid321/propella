@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { Trophy, Check, Lock } from 'lucide-react'
 import { format } from 'date-fns'
 import { useRoadmap } from '@/lib/hooks/use-roadmap'
@@ -79,6 +80,7 @@ function statusLabel(status: RoadmapNode['status']) {
 }
 
 function RoadmapNodeCard({ node, onClick }: { node: RoadmapNode; onClick: () => void }) {
+  const t = useTranslations('roadmap')
   const subjectColor = getSubjectColor(node.subjectSlug)
 
   return (
@@ -151,7 +153,13 @@ function RoadmapNodeCard({ node, onClick }: { node: RoadmapNode; onClick: () => 
 
         {/* Status row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-          <Badge variant={statusBadgeVariant(node.status)}>{statusLabel(node.status)}</Badge>
+          <Badge variant={statusBadgeVariant(node.status)}>
+            {node.status === 'in-progress' ? t('inProgress')
+              : node.status === 'needs-revision' ? t('needsRevision')
+              : node.status === 'completed' ? t('completed')
+              : node.status === 'ready' ? t('ready')
+              : t('locked')}
+          </Badge>
 
           {node.status === 'completed' && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -298,6 +306,7 @@ function SkeletonNode({ isLast }: { isLast: boolean }) {
 
 export default function RoadmapPage() {
   const { data, isLoading } = useRoadmap()
+  const t = useTranslations('roadmap')
   const [activeSubject, setActiveSubject] = useState<string>('all')
 
   // Derive unique subjects from nodes
@@ -328,7 +337,7 @@ export default function RoadmapPage() {
             marginBottom: 6,
           }}
         >
-          Your roadmap
+          {t('title')}
         </h1>
         {isLoading ? (
           <Skeleton className="h-4 w-48" />

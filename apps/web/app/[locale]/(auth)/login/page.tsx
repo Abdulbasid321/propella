@@ -3,7 +3,9 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import Link from 'next/link'
+import Cookies from 'js-cookie'
 import { LoginSchema, type LoginInput } from '@propella/shared'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -14,9 +16,13 @@ import { useAuthStore } from '@/lib/stores/auth-store'
 import type { AuthUser } from '@propella/shared'
 import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 export default function LoginPage() {
+  const t = useTranslations('auth')
   const router = useRouter()
+  const params = useParams()
+  const currentLocale = (params.locale as string) ?? 'en'
   const setUser = useAuthStore((s) => s.setUser)
   const setToken = useAuthStore((s) => s.setAccessToken)
   const [serverError, setServerError] = useState<string | null>(null)
@@ -39,7 +45,13 @@ export default function LoginPage() {
       })
       setToken(res.data.accessToken)
       setUser(res.data.user)
-      router.push('/dashboard')
+      const userLocale = res.data.user.locale ?? 'en'
+      if (userLocale !== currentLocale) {
+        Cookies.set('NEXT_LOCALE', userLocale, { expires: 365, path: '/', sameSite: 'lax' })
+        router.replace(`/${userLocale}/dashboard`)
+      } else {
+        router.push('/dashboard')
+      }
     } catch (err) {
       setServerError(err instanceof Error ? err.message : 'Something went wrong')
     }
@@ -53,14 +65,14 @@ export default function LoginPage() {
             className="text-[22px] font-semibold text-[var(--color-ink)] leading-[1.3] mb-1"
             style={{ fontFamily: 'var(--font-display)' }}
           >
-            Sign in
+            {t('login')}
           </h1>
           <p className="text-[13px] text-[var(--color-ink-2)]">Welcome back.</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5">
           <div>
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{t('email')}</Label>
             <Input
               id="email"
               type="email"
@@ -81,7 +93,7 @@ export default function LoginPage() {
                 href="/forgot-password"
                 className="text-[13px] text-[var(--color-ink-3)] hover:text-[var(--color-ink)] transition-colors"
               >
-                Forgot password?
+                {t('forgotPassword')}
               </Link>
             </div>
             <div style={{ position: 'relative' }}>
@@ -133,7 +145,7 @@ export default function LoginPage() {
             className="w-full"
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Signing in...' : 'Sign in'}
+            {isSubmitting ? `${t('signingIn')}...` : t('login')}
           </Button>
         </form>
 
@@ -164,7 +176,7 @@ export default function LoginPage() {
             href="/signup"
             className="text-[var(--color-accent)] hover:underline underline-offset-[3px] decoration-[1px]"
           >
-            Create an account
+            {t('signup')}
           </Link>
         </p>
       </CardContent>

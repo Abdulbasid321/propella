@@ -5,6 +5,7 @@ import Link from 'next/link'
 import {
   AreaChart, Area, XAxis, ResponsiveContainer, Tooltip,
 } from 'recharts'
+import { useTranslations } from 'next-intl'
 import { useDashboard } from '@/lib/hooks/use-dashboard'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -205,6 +206,7 @@ function StreakCard({
   longestStreak: number
   lastActiveDate: string
 }) {
+  const t = useTranslations('dashboard')
   // Build 7-day history dots (today + last 6 days)
   const today = new Date()
   const last7 = Array.from({ length: 7 }, (_, i) => {
@@ -238,7 +240,7 @@ function StreakCard({
             marginBottom: 12,
           }}
         >
-          day streak
+          {t('streakLabel', { count: currentStreak })}
         </p>
         <div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
           {dots.map((dot, i) => (
@@ -343,11 +345,12 @@ function XPRankCard({
 
 // Weakest topics card
 function WeakestTopicsCard({ topics }: { topics: WeakTopic[] }) {
+  const t = useTranslations('dashboard')
   return (
     <Card className="lg:col-span-6">
       <CardHeader>
         <CardTitle style={{ fontFamily: 'var(--font-sans)', fontWeight: 600 }}>
-          Where you are struggling
+          {t('weakestTopics')}
         </CardTitle>
         <p style={{ fontFamily: 'var(--font-sans)', fontSize: 13, color: 'var(--color-ink-3)', marginTop: 4 }}>
           Topics with the lowest mastery
@@ -629,6 +632,7 @@ function ExamReadinessCard({ readiness }: { readiness: number }) {
 
 export default function DashboardPage() {
   const { data, isLoading, isError } = useDashboard()
+  const t = useTranslations('dashboard')
 
   const today = new Date()
   const dateLabel = format(today, 'EEEE, MMMM d.')
@@ -671,7 +675,9 @@ export default function DashboardPage() {
             <Skeleton className="h-9 w-48 inline-block" />
           ) : (
             <>
-              {data?.daysToExam ?? '—'} days to {data?.examType?.toUpperCase() ?? 'exam'}.
+              {data?.daysToExam != null
+                ? t('daysToExam', { days: data.daysToExam, exam: data.examType?.toUpperCase() ?? 'exam' })
+                : '—'}
             </>
           )}
         </h1>

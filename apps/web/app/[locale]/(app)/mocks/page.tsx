@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/api-client'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
@@ -45,6 +46,7 @@ function formatDuration(seconds: number): string {
 
 export default function MocksPage() {
   const router = useRouter()
+  const t = useTranslations('mocks')
   const [showModal, setShowModal] = useState(false)
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([
     'english',
@@ -115,14 +117,14 @@ export default function MocksPage() {
               marginBottom: 8,
             }}
           >
-            Mock exams
+            {t('title')}
           </h1>
           <p style={{ fontFamily: 'var(--font-sans)', fontSize: 15, color: 'var(--color-ink-2)' }}>
             Full-length practice papers from the real syllabus.
           </p>
         </div>
         <Button variant="accent" onClick={() => setShowModal(true)}>
-          Start a mock
+          {t('startMock')}
         </Button>
       </div>
 
@@ -161,7 +163,7 @@ export default function MocksPage() {
                     marginBottom: 8,
                   }}
                 >
-                  Exam type
+                  {t('examType')}
                 </p>
                 <Badge variant="default" style={{ textTransform: 'uppercase', fontSize: 13 }}>
                   {examType}
@@ -281,7 +283,7 @@ export default function MocksPage() {
                     marginBottom: 4,
                   }}
                 >
-                  {mock.questionCount} questions · {formatDuration(mock.timeLimit)} allowed
+                  {t('questions', { count: mock.questionCount })} · {formatDuration(mock.timeLimit)} allowed
                 </p>
                 <p
                   style={{

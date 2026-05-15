@@ -1,6 +1,9 @@
+'use client'
 import { BellOff } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 export function NotificationEmpty() {
+  const t = useTranslations('notifications')
   return (
     <div
       style={{
@@ -23,7 +26,7 @@ export function NotificationEmpty() {
           margin: 0,
         }}
       >
-        Nothing yet.
+        {t('empty')}
       </p>
       <p
         style={{
@@ -35,7 +38,7 @@ export function NotificationEmpty() {
           lineHeight: 1.5,
         }}
       >
-        Reminders and updates appear here.
+        {t('emptyBody')}
       </p>
     </div>
   )

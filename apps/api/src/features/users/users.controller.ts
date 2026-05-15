@@ -32,6 +32,7 @@ export async function updateMe(
       name?: string
       theme?: 'system' | 'light' | 'dark'
       timezone?: string
+      locale?: 'en' | 'yo' | 'ha' | 'ig'
       notifications?: {
         email?: boolean
         push?: boolean

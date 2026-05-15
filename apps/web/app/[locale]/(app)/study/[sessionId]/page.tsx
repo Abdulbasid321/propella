@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import ReactMarkdown from 'react-markdown'
 import { Pause, Play, X, FileText, MessageCircle, BookOpen } from 'lucide-react'
 import { api } from '@/lib/api-client'
@@ -45,6 +46,7 @@ Focus your revision on areas with high exam weight. Use active recall rather tha
 export default function StudySessionPage() {
   const params = useParams()
   const router = useRouter()
+  const t = useTranslations('study')
   const sessionId = params.sessionId as string
 
   const [elapsed, setElapsed] = useState(0)
@@ -134,11 +136,11 @@ export default function StudySessionPage() {
             variant="ghost"
             size="sm"
             onClick={() => setIsPaused((p) => !p)}
-            aria-label={isPaused ? 'Resume' : 'Pause'}
+            aria-label={isPaused ? t('resumeSession') : t('pauseSession')}
           >
             {isPaused ? <Play size={16} /> : <Pause size={16} />}
             <span style={{ fontFamily: 'var(--font-sans)', fontSize: 13 }}>
-              {isPaused ? 'Resume' : 'Pause'}
+              {isPaused ? t('resumeSession') : t('pauseSession')}
             </span>
           </Button>
 
@@ -353,7 +355,7 @@ export default function StudySessionPage() {
                   margin: 0,
                 }}
               >
-                Notes
+                {t('notes')}
               </h3>
               <Button variant="ghost" size="sm" onClick={() => setNotesOpen(false)}>
                 <X size={14} />
@@ -363,7 +365,7 @@ export default function StudySessionPage() {
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Write your notes here..."
+              placeholder={t('notesPlaceholder')}
               style={{
                 flex: 1,
                 resize: 'none',
@@ -447,7 +449,7 @@ export default function StudySessionPage() {
                   fontWeight: 600,
                 }}
               >
-                +{summaryData.xpAwarded} XP
+                {t('xpEarned', { xp: summaryData.xpAwarded })}
               </div>
             )}
           </div>

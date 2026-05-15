@@ -7,4 +7,4 @@ export const localeMetadata = {
   yo: { label: 'Yoruba',   nativeLabel: 'Yorùbá',  flag: null },
   ha: { label: 'Hausa',    nativeLabel: 'Hausa',   flag: null },
   ig: { label: 'Igbo',     nativeLabel: 'Igbo',    flag: null },
-} as const satisfies Record<Locale, { label: string; nativeLabel: string; flag: null }>
+} as const

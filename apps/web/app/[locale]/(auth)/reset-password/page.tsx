@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { useState, Suspense } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { z } from 'zod'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -26,6 +27,7 @@ const ResetFormSchema = z
 type ResetFormValues = z.infer<typeof ResetFormSchema>
 
 function ResetPasswordForm() {
+  const t = useTranslations('auth')
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams.get('token') ?? ''
@@ -118,7 +120,7 @@ function ResetPasswordForm() {
       </div>
 
       <div>
-        <Label htmlFor="confirm">Confirm password</Label>
+        <Label htmlFor="confirm">{t('confirmPassword')}</Label>
         <Input
           id="confirm"
           type={showPassword ? 'text' : 'password'}
@@ -139,7 +141,7 @@ function ResetPasswordForm() {
       )}
 
       <Button type="submit" variant="accent" size="lg" className="w-full" disabled={isSubmitting}>
-        {isSubmitting ? 'Saving...' : 'Set new password'}
+        {isSubmitting ? `${t('resetPassword')}...` : t('resetPassword')}
       </Button>
 
       <p className="text-center text-[13px] text-[var(--color-ink-2)]">
@@ -155,6 +157,7 @@ function ResetPasswordForm() {
 }
 
 export default function ResetPasswordPage() {
+  const t = useTranslations('auth')
   return (
     <Card variant="elevated">
       <CardContent className="p-8">
@@ -163,7 +166,7 @@ export default function ResetPasswordPage() {
             className="text-[22px] font-semibold text-[var(--color-ink)] leading-[1.3] mb-1"
             style={{ fontFamily: 'var(--font-display)' }}
           >
-            Set a new password
+            {t('resetPassword')}
           </h1>
           <p className="text-[13px] text-[var(--color-ink-2)]">
             Choose a password you have not used before.

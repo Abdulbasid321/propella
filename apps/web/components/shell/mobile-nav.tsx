@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Home, Compass, LayoutGrid, User } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils/cn'
 import { ToolsSheet } from './tools-sheet'
 
@@ -26,6 +27,7 @@ function isToolsRoute(pathname: string) {
 export function MobileNav() {
   const pathname = usePathname()
   const [sheetOpen, setSheetOpen] = useState(false)
+  const t = useTranslations('nav')
 
   const toolsActive = isToolsRoute(pathname)
 
@@ -41,10 +43,10 @@ export function MobileNav() {
         }}
       >
         {/* Home */}
-        <NavTab href="/dashboard" icon={Home} label="Home" pathname={pathname} />
+        <NavTab href="/dashboard" icon={Home} label={t('dashboard')} pathname={pathname} />
 
         {/* Roadmap */}
-        <NavTab href="/roadmap" icon={Compass} label="Roadmap" pathname={pathname} />
+        <NavTab href="/roadmap" icon={Compass} label={t('roadmap')} pathname={pathname} />
 
         {/* Study CTA — raised circle */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -78,11 +80,11 @@ export function MobileNav() {
           aria-label="Tools"
         >
           <LayoutGrid size={22} strokeWidth={1.5} />
-          <span style={{ fontSize: 10, fontWeight: 500, fontFamily: 'var(--font-sans)' }}>Tools</span>
+          <span style={{ fontSize: 10, fontWeight: 500, fontFamily: 'var(--font-sans)' }}>{t('tools')}</span>
         </button>
 
         {/* Profile */}
-        <NavTab href="/settings" icon={User} label="Profile" pathname={pathname} />
+        <NavTab href="/settings" icon={User} label={t('profile')} pathname={pathname} />
       </nav>
 
       <ToolsSheet open={sheetOpen} onClose={() => setSheetOpen(false)} />

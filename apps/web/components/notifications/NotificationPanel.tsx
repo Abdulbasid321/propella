@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { useNotifications, type Notification } from '@/lib/hooks/use-notifications'
 import { useMarkRead } from '@/lib/hooks/use-mark-read'
 import { useMarkAllRead } from '@/lib/hooks/use-mark-all-read'
@@ -19,6 +20,7 @@ export function NotificationPanel({ onClose }: NotificationPanelProps) {
   const { data, isLoading, isError, refetch } = useNotifications()
   const markRead = useMarkRead()
   const markAllRead = useMarkAllRead()
+  const t = useTranslations('notifications')
 
   // Close on outside click
   useEffect(() => {
@@ -94,7 +96,7 @@ export function NotificationPanel({ onClose }: NotificationPanelProps) {
             color: 'var(--color-ink)',
           }}
         >
-          Notifications
+          {t('title')}
         </span>
         {unreadCount > 0 && (
           <Button
@@ -103,7 +105,7 @@ export function NotificationPanel({ onClose }: NotificationPanelProps) {
             onClick={handleMarkAllRead}
             style={{ fontSize: 13, height: 'auto', padding: '4px 8px' }}
           >
-            Mark all read
+            {t('markAllRead')}
           </Button>
         )}
       </div>
@@ -162,7 +164,7 @@ export function NotificationPanel({ onClose }: NotificationPanelProps) {
             padding: 0,
           }}
         >
-          Notification settings →
+          {t('settingsLink')}
         </button>
       </div>
     </div>

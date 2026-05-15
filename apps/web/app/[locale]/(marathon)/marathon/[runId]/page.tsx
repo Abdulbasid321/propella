@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { api } from '@/lib/api-client'
 import { Button } from '@/components/ui/button'
 
@@ -99,6 +100,7 @@ function CircularProgress({
 export default function ActiveMarathonPage() {
   const params = useParams()
   const router = useRouter()
+  const t = useTranslations('marathon')
   const runId = params.runId as string
 
   const [config, setConfig] = useState<RunConfig | null>(null)
@@ -244,7 +246,7 @@ export default function ActiveMarathonPage() {
             color: 'var(--color-ink)',
           }}
         >
-          Done.
+          {t('great')}
         </h1>
         <div style={{ display: 'flex', gap: 48 }}>
           <div>
@@ -409,7 +411,7 @@ export default function ActiveMarathonPage() {
         </h2>
         <div style={{ display: 'flex', gap: 12 }}>
           <Button variant="accent" onClick={handleResume}>
-            Resume
+            {t('resume')}
           </Button>
           <Button variant="ghost" onClick={handleEnd}>
             End session
@@ -450,7 +452,7 @@ export default function ActiveMarathonPage() {
       </p>
       <div style={{ display: 'flex', gap: 12 }}>
         <Button variant="ghost" onClick={handlePause}>
-          Pause
+          {t('pause')}
         </Button>
         <Button variant="ghost" onClick={handleEnd} style={{ color: 'var(--color-ink-3)' }}>
           End session

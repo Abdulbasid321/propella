@@ -34,6 +34,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "framer-motion": "^11.3.0",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.408.0",
     "nanoid": "^5.0.7",
     "next": "16.2.6",
@@ -52,6 +53,7 @@
   "devDependencies": {
     "@propella/config": "workspace:*",
     "@tailwindcss/postcss": "^4",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

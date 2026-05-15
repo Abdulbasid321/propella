@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { format } from 'date-fns'
 import { useSubjects } from '@/lib/hooks/use-subjects'
 import { useQuery } from '@tanstack/react-query'
@@ -17,12 +18,7 @@ type Difficulty = 'easy' | 'medium' | 'hard' | 'adaptive'
 
 const DIFFICULTIES: Difficulty[] = ['easy', 'medium', 'hard', 'adaptive']
 
-const difficultyLabel: Record<Difficulty, string> = {
-  easy: 'Easy',
-  medium: 'Medium',
-  hard: 'Hard',
-  adaptive: 'Adaptive',
-}
+// difficultyLabel is now resolved via t() inside the component
 
 interface QuizListItem {
   quizId: string
@@ -44,6 +40,7 @@ function useRecentQuizzes() {
 
 export default function QuizzesPage() {
   const router = useRouter()
+  const t = useTranslations('quiz')
   const { data: subjects, isLoading: subjectsLoading } = useSubjects()
   const { data: recentQuizzes, isLoading: quizzesLoading } = useRecentQuizzes()
 
@@ -92,7 +89,7 @@ export default function QuizzesPage() {
             marginBottom: 6,
           }}
         >
-          Quizzes
+          {t('title')}
         </h1>
         <p
           style={{
@@ -216,7 +213,7 @@ export default function QuizzesPage() {
                   display: 'block',
                 }}
               >
-                Difficulty
+                {t('selectDifficulty')}
               </label>
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                 {DIFFICULTIES.map((d) => (
@@ -245,7 +242,7 @@ export default function QuizzesPage() {
                       transition: 'all 0.15s',
                     }}
                   >
-                    {difficultyLabel[d]}
+                    {t(d)}
                   </button>
                 ))}
               </div>
@@ -268,7 +265,7 @@ export default function QuizzesPage() {
               onClick={handleGenerate}
               disabled={generating || !selectedSubject || !selectedTopic}
             >
-              {generating ? 'Generating...' : 'Generate quiz'}
+              {generating ? 'Generating...' : t('generateQuiz')}
             </Button>
           </div>
         </CardContent>

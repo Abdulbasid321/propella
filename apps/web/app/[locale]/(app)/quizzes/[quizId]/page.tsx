@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { api } from '@/lib/api-client'
 import { Button } from '@/components/ui/button'
 import { LoadingState } from '@/components/common/loading-state'
@@ -34,6 +35,7 @@ type AnswerMap = Map<string, 'A' | 'B' | 'C' | 'D'>
 export default function QuizEnginePage() {
   const params = useParams()
   const router = useRouter()
+  const t = useTranslations('quiz')
   const quizId = params.quizId as string
 
   const [quiz, setQuiz] = useState<QuizData | null>(null)
@@ -177,7 +179,7 @@ export default function QuizEnginePage() {
           {error ?? 'Quiz not found'}
         </p>
         <Button variant="secondary" onClick={() => router.push('/quizzes')}>
-          Back to quizzes
+          {t('backToQuizzes')}
         </Button>
       </div>
     )
@@ -215,7 +217,7 @@ export default function QuizEnginePage() {
               color: 'var(--color-ink-3)',
             }}
           >
-            Question {currentIndex + 1} of {totalQuestions}
+            {t('question', { current: currentIndex + 1, total: totalQuestions })}
           </span>
           <span
             style={{
@@ -348,7 +350,7 @@ export default function QuizEnginePage() {
             onClick={handleSubmit}
             disabled={submitting || answeredCount === 0}
           >
-            {submitting ? 'Submitting...' : 'Submit quiz'}
+            {submitting ? 'Submitting...' : t('submitQuiz')}
           </Button>
         ) : (
           <Button variant="default" onClick={handleNext}>

@@ -1,5 +1,6 @@
 'use client'
 import { useParams, useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/api-client'
 import { Button } from '@/components/ui/button'
@@ -34,6 +35,7 @@ interface AttemptResult {
 export default function MockResultsPage() {
   const params = useParams()
   const router = useRouter()
+  const t = useTranslations('mocks')
   const attemptId = params.attemptId as string
   const mockId = params.mockId as string
 
@@ -98,10 +100,10 @@ export default function MockResultsPage() {
             marginBottom: 8,
           }}
         >
-          {attempt.score}%
+          {t('score', { score: attempt.score })}
         </h1>
         <p style={{ fontFamily: 'var(--font-sans)', fontSize: 14, color: 'var(--color-ink-3)' }}>
-          {quiz.questionCount} questions · {formatDuration(attempt.durationSec)} taken ·{' '}
+          {t('questions', { count: quiz.questionCount })} · {formatDuration(attempt.durationSec)} taken ·{' '}
           <span style={{ color: 'var(--color-accent)', fontWeight: 500 }}>
             +{attempt.xpAwarded} XP
           </span>
@@ -139,7 +141,7 @@ export default function MockResultsPage() {
                 color: scoreColor,
               }}
             >
-              {attempt.score}%
+              {t('score', { score: attempt.score })}
             </p>
           </CardContent>
         </Card>

@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { ChevronLeft } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 import { useNotifications, type Notification } from '@/lib/hooks/use-notifications'
 import { useMarkRead } from '@/lib/hooks/use-mark-read'
 import { useMarkAllRead } from '@/lib/hooks/use-mark-all-read'
@@ -21,6 +22,7 @@ export function NotificationSheet({ open, onClose }: NotificationSheetProps) {
   const { data, isLoading, isError, refetch } = useNotifications()
   const markRead = useMarkRead()
   const markAllRead = useMarkAllRead()
+  const t = useTranslations('notifications')
 
   // Refetch when sheet opens
   useEffect(() => {
@@ -116,7 +118,7 @@ export function NotificationSheet({ open, onClose }: NotificationSheetProps) {
                   transform: 'translateX(-50%)',
                 }}
               >
-                Notifications
+                {t('title')}
               </span>
 
               {unreadCount > 0 && (
@@ -126,7 +128,7 @@ export function NotificationSheet({ open, onClose }: NotificationSheetProps) {
                   onClick={() => markAllRead.mutate()}
                   style={{ fontSize: 13, height: 'auto', padding: '4px 8px' }}
                 >
-                  Mark all read
+                  {t('markAllRead')}
                 </Button>
               )}
             </div>
@@ -186,7 +188,7 @@ export function NotificationSheet({ open, onClose }: NotificationSheetProps) {
                   padding: 0,
                 }}
               >
-                Notification settings →
+                {t('settingsLink')}
               </button>
             </div>
           </motion.div>

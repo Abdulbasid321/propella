@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 import { api } from '@/lib/api-client'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -23,10 +24,10 @@ interface LeaderboardData {
   myEntry: LeaderboardEntry | null
 }
 
-const PERIOD_LABELS: Record<Period, string> = {
-  week: 'This week',
-  month: 'This month',
-  all: 'All time',
+const PERIOD_KEYS: Record<Period, 'weekly' | 'monthly' | 'allTime'> = {
+  week: 'weekly',
+  month: 'monthly',
+  all: 'allTime',
 }
 
 function rankBadgeVariant(rank: number): 'default' | 'accent' | 'success' | 'warning' {
@@ -62,6 +63,7 @@ function LeaderboardRow({
   entry: LeaderboardEntry
   isMe: boolean
 }) {
+  const t = useTranslations('leaderboard')
   return (
     <div
       style={{
@@ -98,7 +100,7 @@ function LeaderboardRow({
                 marginLeft: 8,
               }}
             >
-              (you)
+              ({t('you')})
             </span>
           )}
         </p>
@@ -122,7 +124,7 @@ function LeaderboardRow({
           flexShrink: 0,
         }}
       >
-        {entry.xp.toLocaleString()} XP
+        {t('xp', { xp: entry.xp.toLocaleString() })}
       </span>
     </div>
   )
@@ -131,6 +133,7 @@ function LeaderboardRow({
 export default function LeaderboardPage() {
   const [period, setPeriod] = useState<Period>('week')
   const user = useAuthStore((s) => s.user)
+  const t = useTranslations('leaderboard')
 
   const { data, isLoading } = useQuery({
     queryKey: ['leaderboard', period],
@@ -157,7 +160,7 @@ export default function LeaderboardPage() {
             marginBottom: 8,
           }}
         >
-          Leaderboard
+          {t('title')}
         </h1>
         <p style={{ fontFamily: 'var(--font-sans)', fontSize: 15, color: 'var(--color-ink-2)' }}>
           See how you stack up against other students.
@@ -166,7 +169,7 @@ export default function LeaderboardPage() {
 
       {/* Period tabs */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
-        {(Object.keys(PERIOD_LABELS) as Period[]).map((p) => (
+        {(Object.keys(PERIOD_KEYS) as Period[]).map((p) => (
           <button
             key={p}
             onClick={() => setPeriod(p)}
@@ -183,7 +186,7 @@ export default function LeaderboardPage() {
               transition: 'all 0.15s',
             }}
           >
-            {PERIOD_LABELS[p]}
+            {t(PERIOD_KEYS[p])}
           </button>
         ))}
       </div>
@@ -219,7 +222,7 @@ export default function LeaderboardPage() {
               ))}
             </div>
           ) : entries.length === 0 ? (
-            <EmptyState message="Earn 500 XP to appear on the board." />
+            <EmptyState message={t('noData')} />
           ) : (
             entries.map((entry) => (
               <LeaderboardRow

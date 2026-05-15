@@ -1,5 +1,6 @@
 'use client'
 import { useQuery } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 import { api } from '@/lib/api-client'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -204,6 +205,7 @@ export default function ProgressPage() {
     queryFn: () =>
       api.get<{ data: ProgressData }>('/progress').then((r) => r.data),
   })
+  const t = useTranslations('progress')
 
   const hasData =
     data &&
@@ -238,9 +240,9 @@ export default function ProgressPage() {
             marginBottom: 32,
           }}
         >
-          Progress
+          {t('title')}
         </h1>
-        <EmptyState message="Come back in a few days. Progress needs something to compare against." />
+        <EmptyState message={t('noProgress')} />
       </div>
     )
   }
@@ -261,7 +263,7 @@ export default function ProgressPage() {
           marginBottom: 32,
         }}
       >
-        Progress
+        {t('title')}
       </h1>
 
       {/* Key numbers */}

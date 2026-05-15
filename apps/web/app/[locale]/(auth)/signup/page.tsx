@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { SignupSchema } from '@propella/shared'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -57,6 +58,7 @@ function PasswordStrengthBar({ password }: { password: string }) {
 }
 
 export default function SignupPage() {
+  const t = useTranslations('auth')
   const router = useRouter()
   const setUser = useAuthStore((s) => s.setUser)
   const setToken = useAuthStore((s) => s.setAccessToken)
@@ -96,7 +98,7 @@ export default function SignupPage() {
             className="text-[22px] font-semibold text-[var(--color-ink)] leading-[1.3] mb-1"
             style={{ fontFamily: 'var(--font-display)' }}
           >
-            Create your accountpnpm dev
+            {t('signup')}
           </h1>
           <p className="text-[13px] text-[var(--color-ink-2)]">
             Five minutes to set up. Then we build your roadmap.
@@ -105,7 +107,7 @@ export default function SignupPage() {
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5">
           <div>
-            <Label htmlFor="name">Full name</Label>
+            <Label htmlFor="name">{t('fullName')}</Label>
             <Input
               id="name"
               type="text"
@@ -120,7 +122,7 @@ export default function SignupPage() {
           </div>
 
           <div>
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{t('email')}</Label>
             <Input
               id="email"
               type="email"
@@ -222,17 +224,17 @@ export default function SignupPage() {
             className="w-full"
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Creating account...' : 'Continue'}
+            {isSubmitting ? `${t('creatingAccount')}...` : t('signup')}
           </Button>
         </form>
 
         <p className="mt-6 text-center text-[13px] text-[var(--color-ink-2)]">
-          Already have an account?{' '}
+          {t('haveAccount')}{' '}
           <Link
             href="/login"
             className="text-[var(--color-accent)] hover:underline underline-offset-[3px] decoration-[1px]"
           >
-            Sign in
+            {t('login')}
           </Link>
         </p>
       </CardContent>

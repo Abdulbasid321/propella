@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { useQuery } from '@tanstack/react-query'
 import { LogOut } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { api } from '@/lib/api-client'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
@@ -125,6 +126,7 @@ function ToggleRow({
 }
 
 function ProfileTab() {
+  const t = useTranslations('settings')
   const user = useAuthStore((s) => s.user)
   const [saved, setSaved] = useState(false)
   const { register, handleSubmit } = useForm<ProfileForm>({
@@ -148,13 +150,13 @@ function ProfileTab() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle style={{ fontFamily: 'var(--font-sans)', fontWeight: 600 }}>Profile</CardTitle>
+        <CardTitle style={{ fontFamily: 'var(--font-sans)', fontWeight: 600 }}>{t('profile')}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <div>
             <Label htmlFor="name" style={{ fontFamily: 'var(--font-sans)', fontSize: 13, color: 'var(--color-ink-2)', display: 'block', marginBottom: 6 }}>
-              Full name
+              {t('name')}
             </Label>
             <Input id="name" {...register('name')} />
           </div>
@@ -189,14 +191,14 @@ function ProfileTab() {
 
           <div>
             <Label htmlFor="timezone" style={{ fontFamily: 'var(--font-sans)', fontSize: 13, color: 'var(--color-ink-2)', display: 'block', marginBottom: 6 }}>
-              Timezone
+              {t('timezone')}
             </Label>
             <Input id="timezone" {...register('timezone')} />
           </div>
 
           <div>
             <Label style={{ fontFamily: 'var(--font-sans)', fontSize: 13, color: 'var(--color-ink-2)', display: 'block', marginBottom: 8 }}>
-              Theme
+              {t('theme')}
             </Label>
             <div style={{ display: 'flex', gap: 10 }}>
               {(['system', 'light', 'dark'] as const).map((t) => (
@@ -215,7 +217,7 @@ function ProfileTab() {
 
           <div>
             <Button variant="accent" type="submit">
-              {saved ? 'Saved' : 'Save changes'}
+              {saved ? 'Saved' : t('saveChanges')}
             </Button>
           </div>
         </form>
@@ -225,6 +227,7 @@ function ProfileTab() {
 }
 
 function ExamTab() {
+  const t = useTranslations('settings')
   const [saved, setSaved] = useState(false)
   const { data: profile } = useQuery({
     queryKey: ['exam-profile-settings'],
@@ -279,7 +282,7 @@ function ExamTab() {
           </div>
           <div>
             <Button variant="accent" type="submit">
-              {saved ? 'Saved' : 'Save changes'}
+              {saved ? 'Saved' : t('saveChanges')}
             </Button>
           </div>
         </form>
@@ -289,6 +292,7 @@ function ExamTab() {
 }
 
 function NotificationsTab() {
+  const t = useTranslations('settings')
   const user = useAuthStore((s) => s.user)
   const [notifications, setNotifications] = useState<NotificationsForm>({
     email: true,
@@ -316,7 +320,7 @@ function NotificationsTab() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle style={{ fontFamily: 'var(--font-sans)', fontWeight: 600 }}>Notifications</CardTitle>
+        <CardTitle style={{ fontFamily: 'var(--font-sans)', fontWeight: 600 }}>{t('notifications')}</CardTitle>
       </CardHeader>
       <CardContent>
         <ToggleRow
@@ -345,7 +349,7 @@ function NotificationsTab() {
         />
         <div style={{ paddingTop: 4 }}>
           <ToggleRow
-            label="Weekly digest"
+            label={t('notifWeeklyDigest')}
             description="Summary of your progress each week"
             checked={notifications.weeklyDigest}
             onChange={() => toggle('weeklyDigest')}
@@ -362,6 +366,7 @@ function NotificationsTab() {
 }
 
 function PlanTab() {
+  const t = useTranslations('settings')
   const user = useAuthStore((s) => s.user)
   const plan = user?.plan ?? 'free'
 
@@ -382,7 +387,7 @@ function PlanTab() {
               marginBottom: 6,
             }}
           >
-            Current plan
+            {t('currentPlan')}
           </p>
           <p
             style={{
@@ -393,7 +398,7 @@ function PlanTab() {
               textTransform: 'capitalize',
             }}
           >
-            {plan === 'scholar' ? 'Scholar' : 'Free'}
+            {plan === 'scholar' ? t('scholarPlan') : t('freePlan')}
           </p>
         </div>
 
@@ -416,7 +421,7 @@ function PlanTab() {
                 marginBottom: 8,
               }}
             >
-              Upgrade to Scholar
+              {t('upgradePlan')}
             </p>
             <ul style={{ padding: '0 0 0 16px', margin: 0 }}>
               {[
@@ -494,6 +499,8 @@ function PrivacyTab() {
 }
 
 export default function SettingsPage() {
+  const t = useTranslations('settings')
+  const tAuth = useTranslations('auth')
   const searchParams = useSearchParams()
   const user = useAuthStore((s) => s.user)
   const [signOutOpen, setSignOutOpen] = useState(false)
@@ -529,7 +536,7 @@ export default function SettingsPage() {
           marginBottom: 32,
         }}
       >
-        Settings
+        {t('title')}
       </h1>
 
       {/* Tab bar */}
@@ -562,7 +569,13 @@ export default function SettingsPage() {
               whiteSpace: 'nowrap',
             }}
           >
-            {tab.label}
+            {tab.id === 'profile'
+              ? t('profile')
+              : tab.id === 'notifications'
+              ? t('notifications')
+              : tab.id === 'plan'
+              ? t('plan')
+              : tab.label}
           </button>
         ))}
       </div>
@@ -582,9 +595,9 @@ export default function SettingsPage() {
             width: '100%',
             padding: '14px 0',
             backgroundColor: 'var(--color-card)',
-            border: '1px solid var(--color-danger)',
+            border: '1px solid var(--color-accent)',
             borderRadius: 'var(--radius-sm)',
-            color: 'var(--color-danger)',
+            color: 'var(--color-accent)',
             fontFamily: 'var(--font-sans)',
             fontSize: 14,
             fontWeight: 500,
@@ -592,7 +605,7 @@ export default function SettingsPage() {
           }}
         >
           <LogOut size={16} strokeWidth={1.5} />
-          Sign out
+          {tAuth('logout')}
         </button>
         <p
           style={{

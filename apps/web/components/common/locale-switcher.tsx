@@ -1,5 +1,6 @@
 'use client'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
+import Cookies from 'js-cookie'
 import { Globe, Check } from 'lucide-react'
 import { usePathname, useRouter } from '@/lib/i18n/navigation'
 import { useParams } from 'next/navigation'
@@ -13,6 +14,7 @@ interface LocaleSwitcherProps {
 
 export function LocaleSwitcher({ variant = 'popover', onSelect }: LocaleSwitcherProps) {
   const [open, setOpen] = useState(false)
+  const [isPending, startTransition] = useTransition()
   const router = useRouter()
   const pathname = usePathname()
   const params = useParams()
@@ -27,21 +29,28 @@ export function LocaleSwitcher({ variant = 'popover', onSelect }: LocaleSwitcher
     }
 
     // Persist preference to backend (best-effort)
-    api.patch('/users/profile', { locale }).catch(() => null)
+    api.patch('/users/me', { locale }).catch(() => null)
+
+    // Persist in cookie so middleware preserves it on refresh
+    Cookies.set('NEXT_LOCALE', locale, { expires: 365, path: '/', sameSite: 'lax' })
 
     setOpen(false)
     onSelect?.()
 
-    router.replace(pathname, { locale })
+    // startTransition bypasses RSC cache and re-fetches the [locale] layout
+    startTransition(() => {
+      router.replace(pathname, { locale })
+    })
   }
 
   if (variant === 'inline') {
     return (
-      <div>
+      <div style={{ opacity: isPending ? 0.6 : 1, transition: 'opacity 150ms' }}>
         {locales.map((locale) => (
           <button
             key={locale}
             onClick={() => handleLocaleChange(locale)}
+            disabled={isPending}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -51,7 +60,7 @@ export function LocaleSwitcher({ variant = 'popover', onSelect }: LocaleSwitcher
               background: 'none',
               border: 'none',
               borderBottom: '1px solid var(--color-rule)',
-              cursor: 'pointer',
+              cursor: isPending ? 'wait' : 'pointer',
               textAlign: 'left',
             }}
           >
@@ -84,8 +93,13 @@ export function LocaleSwitcher({ variant = 'popover', onSelect }: LocaleSwitcher
     <div style={{ position: 'relative' }}>
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-2.5 px-3 py-2 text-[14px] font-medium w-full text-left transition-colors hover:bg-[var(--color-paper-3)] rounded-[var(--radius-sm)]"
-        style={{ color: 'var(--color-ink-2)', background: 'none', border: 'none', cursor: 'pointer' }}
+        className="flex items-center gap-2.5 px-3 py-2 text-[14px] font-medium w-full text-left transition-colors text-[var(--color-ink-2)] hover:text-[var(--color-ink)] hover:bg-[var(--color-paper-3)]"
+        style={{
+          border: 'none',
+          cursor: isPending ? 'wait' : 'pointer',
+          opacity: isPending ? 0.6 : 1,
+          transition: 'opacity 150ms',
+        }}
       >
         <Globe size={16} strokeWidth={1.5} />
         <span style={{ flex: 1 }}>Language</span>
@@ -112,8 +126,9 @@ export function LocaleSwitcher({ variant = 'popover', onSelect }: LocaleSwitcher
             <button
               key={locale}
               onClick={() => handleLocaleChange(locale)}
+              disabled={isPending}
               className="flex items-center gap-2.5 px-3 py-2 text-[14px] font-medium w-full text-left hover:bg-[var(--color-paper-3)] transition-colors"
-              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-ink-2)' }}
+              style={{ background: 'none', border: 'none', cursor: isPending ? 'wait' : 'pointer', color: 'var(--color-ink-2)' }}
             >
               <span style={{ flex: 1 }}>{localeMetadata[locale].nativeLabel}</span>
               {locale === currentLocale && (

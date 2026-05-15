@@ -1,6 +1,7 @@
 'use client'
 import { useState, use } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { useQuery } from '@tanstack/react-query'
 import { ChevronRight, Clock, Calendar, BookOpen } from 'lucide-react'
 import { format } from 'date-fns'
@@ -53,6 +54,7 @@ interface PageProps {
 
 export default function TopicDetailPage({ params }: PageProps) {
   const { subjectSlug, topicSlug } = use(params)
+  const t = useTranslations('roadmap')
   const [activeTab, setActiveTab] = useState<Tab>('overview')
   const [notes, setNotes] = useState('')
   const [notesSaved, setNotesSaved] = useState(false)
@@ -154,7 +156,7 @@ export default function TopicDetailPage({ params }: PageProps) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <Clock size={14} strokeWidth={1.5} style={{ color: 'var(--color-ink-3)' }} />
                   <span style={{ fontFamily: 'var(--font-sans)', fontSize: 13, color: 'var(--color-ink-3)' }}>
-                    {node.estimatedMinutes} min
+                    {t('estimatedTime', { minutes: node.estimatedMinutes })}
                   </span>
                 </div>
                 {node.plannedStartDate && (
@@ -165,7 +167,13 @@ export default function TopicDetailPage({ params }: PageProps) {
                     </span>
                   </div>
                 )}
-                <Badge variant={statusBadgeVariant(node.status)}>{statusLabel(node.status)}</Badge>
+                <Badge variant={statusBadgeVariant(node.status)}>
+                  {node.status === 'in-progress' ? t('inProgress')
+                    : node.status === 'needs-revision' ? t('needsRevision')
+                    : node.status === 'completed' ? t('completed')
+                    : node.status === 'ready' ? t('ready')
+                    : t('locked')}
+                </Badge>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <BookOpen size={14} strokeWidth={1.5} style={{ color: 'var(--color-ink-3)' }} />
                   <span style={{ fontFamily: 'var(--font-sans)', fontSize: 13, color: 'var(--color-ink-3)' }}>
@@ -396,7 +404,7 @@ export default function TopicDetailPage({ params }: PageProps) {
                   {node.nextRevisionAt && (
                     <div>
                       <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--color-ink-3)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
-                        Next revision
+                        {t('nextRevision')}
                       </p>
                       <p style={{ fontFamily: 'var(--font-sans)', fontSize: 14, color: 'var(--color-ink)' }}>
                         {format(new Date(node.nextRevisionAt), 'EEEE, MMM d')}
@@ -406,7 +414,7 @@ export default function TopicDetailPage({ params }: PageProps) {
 
                   <div>
                     <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--color-ink-3)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
-                      Mastery
+                      {t('mastery')}
                     </p>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                       <div
