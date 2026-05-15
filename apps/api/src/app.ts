@@ -21,6 +21,7 @@ import marathonRouter from './features/marathon/marathon.routes'
 import assistantRouter from './features/assistant/assistant.routes'
 import mocksRouter from './features/mocks/mocks.routes'
 import leaderboardRouter from './features/leaderboard/leaderboard.routes'
+import notificationsRouter from './features/notifications/notifications.routes'
 
 const app: Express = express()
 
@@ -64,6 +65,7 @@ app.use('/api/marathon', authenticate, marathonRouter)
 app.use('/api/assistant', authenticate, assistantRouter)
 app.use('/api/mocks', authenticate, mocksRouter)
 app.use('/api/leaderboard', authenticate, leaderboardRouter)
+app.use('/api/notifications', authenticate, notificationsRouter)
 
 // Global error handler — must be last
 app.use(errorHandler)

@@ -1,10 +1,11 @@
 'use client'
-import { Flame, Bell, Sun, Moon } from 'lucide-react'
+import { Flame, Sun, Moon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { useStreakXP } from '@/lib/hooks/use-streak-xp'
 import { NumberCounter } from '@/components/common/number-counter'
+import { NotificationBell } from '@/components/notifications/NotificationBell'
 
 interface TopBarProps {
   title?: string
@@ -67,9 +68,7 @@ export function TopBar({ title }: TopBarProps) {
         />
 
         {/* Notification bell */}
-        <Button variant="ghost" size="sm" className="p-1.5 h-auto" aria-label="Notifications">
-          <Bell size={17} strokeWidth={1.5} />
-        </Button>
+        <NotificationBell />
 
         {/* Theme toggle */}
         <Button

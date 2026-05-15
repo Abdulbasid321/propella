@@ -9,6 +9,7 @@ import { NotFoundError, AppError } from '../../middleware/error-handler'
 import { generateQuestions } from './quiz-generation'
 import { calculateSM2, gradeFromPercentage } from '../../lib/spaced-repetition'
 import { updateNodeMastery } from '../roadmap/roadmap.service'
+import { notify } from '../notifications/notification.service'
 import { logger } from '../../config/logger'
 import type { IQuiz } from '../../models/Quiz'
 import type { IQuizAttempt } from '../../models/QuizAttempt'
@@ -313,6 +314,22 @@ export async function submitAttempt(
   attempt.durationSec = input.durationSec
   attempt.completedAt = new Date()
   await attempt.save()
+
+  // Notify for mocks and high-stakes quizzes (score 80%+) — not every casual topic quiz
+  const isMock = quiz?.type === 'mock'
+  const isHighScore = score >= 80
+  if (isMock || isHighScore) {
+    const quizId = attempt.quizId.toString()
+    const attemptId = attempt._id.toString()
+    await notify(userId, 'quiz_result', {
+      title: isMock ? `Mock exam complete — ${score}%` : `Quiz result — ${score}%`,
+      body: isMock
+        ? `You scored ${score}% on your mock exam. Check your results.`
+        : `Great result. You scored ${score}% and earned ${xpAwarded} XP.`,
+      deeplink: `/quizzes/${quizId}/results/${attemptId}`,
+      metadata: { quizId, attemptId },
+    })
+  }
 
   return { attempt, xpAwarded, masteryUpdates }
 }
