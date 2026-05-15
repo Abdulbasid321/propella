@@ -15,11 +15,6 @@
     "typescript": "^5.4.5"
   },
 
-  "engines": {
-    "node": "20.x",
-    "pnpm": "10.x"
-  },
-
   "dependencies": {
     "node-pre-gyp": "^0.17.0"
   }
