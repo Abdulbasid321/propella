@@ -2,6 +2,7 @@
   "extends": "@propella/config/tsconfig",
   "compilerOptions": {
     "target": "ES2020",
+    "ignoreDeprecations": "6.0",
     "module": "CommonJS",
     "moduleResolution": "Node",
     "outDir": "./dist",

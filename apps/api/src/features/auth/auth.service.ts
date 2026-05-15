@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import type { SignupInput } from '@propella/shared'
 import { UserModel, type IUser } from '../../models/User'
