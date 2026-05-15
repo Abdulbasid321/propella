@@ -1,20 +1,19 @@
 {
   "name": "propella",
   "private": true,
-
   "packageManager": "pnpm@10.12.1",
-
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "pnpm --parallel --filter './apps/*' dev",
     "build": "pnpm --filter './packages/*' build && pnpm --filter './apps/*' build",
     "lint": "pnpm --recursive lint",
     "type-check": "pnpm --recursive type-check"
   },
-
   "devDependencies": {
     "typescript": "^5.4.5"
   },
-
   "dependencies": {
     "node-pre-gyp": "^0.17.0"
   }
