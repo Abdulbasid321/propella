@@ -10,6 +10,7 @@ import { Logo } from '@/components/common/logo'
 import { Badge } from '@/components/ui/badge'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { SignOutDialog } from '@/components/auth/sign-out-dialog'
+import { LocaleSwitcher } from '@/components/common/locale-switcher'
 import { cn } from '@/lib/utils/cn'
 import { useState, useRef, useEffect } from 'react'
 
@@ -183,6 +184,11 @@ export function Sidebar() {
                 {label}
               </Link>
             ))}
+
+            {/* Language switcher */}
+            <div style={{ padding: '4px 8px' }}>
+              <LocaleSwitcher variant="popover" onSelect={() => setMenuOpen(false)} />
+            </div>
 
             {/* Divider */}
             <div style={{ height: 1, backgroundColor: 'var(--color-rule)', margin: '4px 0' }} />

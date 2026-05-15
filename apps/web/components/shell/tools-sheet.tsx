@@ -1,10 +1,14 @@
 'use client'
 
+import { useState } from 'react'
 import { motion, AnimatePresence, useDragControls } from 'framer-motion'
 import { useRouter } from 'next/navigation'
-import { X, ChevronRight, BookOpen, ClipboardCheck, FileText, Timer, Sparkles, TrendingUp, Trophy } from 'lucide-react'
+import { X, ChevronRight, BookOpen, ClipboardCheck, FileText, Timer, Sparkles, TrendingUp, Trophy, Globe } from 'lucide-react'
 import { useReducedMotion } from 'framer-motion'
+import { useParams } from 'next/navigation'
 import { cn } from '@/lib/utils/cn'
+import { localeMetadata, type Locale } from '@/lib/i18n/locales'
+import { LocaleSwitcher } from '@/components/common/locale-switcher'
 
 interface ToolsSheetProps {
   open: boolean
@@ -203,7 +207,7 @@ export function ToolsSheet({ open, onClose }: ToolsSheetProps) {
             </div>
 
             {/* Tool rows */}
-            <div style={{ flex: 1 }}>
+            <div style={{ flex: 1, overflowY: 'auto' }}>
               {tools.map((tool, idx) => {
                 const Icon = tool.icon
                 return (
@@ -275,10 +279,69 @@ export function ToolsSheet({ open, onClose }: ToolsSheetProps) {
                   </button>
                 )
               })}
+
+              {/* Language row */}
+              <LanguageRow onClose={onClose} />
             </div>
           </motion.div>
         </>
       )}
     </AnimatePresence>
+  )
+}
+
+function LanguageRow({ onClose }: { onClose: () => void }) {
+  const [open, setOpen] = useState(false)
+  const params = useParams()
+  const currentLocale = (params.locale as Locale) ?? 'en'
+
+  return (
+    <>
+      <div style={{ borderTop: '1px solid var(--color-rule)' }}>
+        <button
+          onClick={() => setOpen((v) => !v)}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16,
+            width: '100%',
+            minHeight: 64,
+            padding: '12px 20px',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            textAlign: 'left',
+          }}
+        >
+          <div
+            style={{
+              width: 40,
+              height: 40,
+              flexShrink: 0,
+              backgroundColor: 'var(--color-paper-2)',
+              borderRadius: 'var(--radius-sm)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Globe size={20} strokeWidth={1.5} color="var(--color-ink)" />
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 16, fontWeight: 500, color: 'var(--color-ink)' }}>Language</div>
+            <div style={{ fontSize: 13, color: 'var(--color-ink-2)', marginTop: 1 }}>
+              {localeMetadata[currentLocale].nativeLabel}
+            </div>
+          </div>
+          <ChevronRight size={18} strokeWidth={1.5} color="var(--color-ink-3)" style={{ flexShrink: 0 }} />
+        </button>
+      </div>
+
+      {open && (
+        <div style={{ borderTop: '1px solid var(--color-rule)', background: 'var(--color-paper-2)' }}>
+          <LocaleSwitcher variant="inline" onSelect={() => { setOpen(false); onClose() }} />
+        </div>
+      )}
+    </>
   )
 }

@@ -41,8 +41,8 @@
   --color-subj-default: #7C766B;
 
   /* Typography */
-  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), var(--font-noto-serif), ui-serif, Georgia, serif;
+  --font-sans: var(--font-geist), var(--font-noto-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 
   /* Radii */
@@ -101,6 +101,12 @@ body {
 
 @utility animate-accordion-up {
   animation: accordion-up 0.2s ease-out;
+}
+
+/* Noto Sans leads for locales where Geist lacks full diacritic coverage */
+html[data-locale="yo"],
+html[data-locale="ig"] {
+  --font-sans: var(--font-noto-sans), var(--font-geist), ui-sans-serif, system-ui, sans-serif;
 }
 
 @media (prefers-reduced-motion: reduce) {

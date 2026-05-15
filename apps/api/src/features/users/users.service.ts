@@ -136,6 +136,7 @@ interface UpdateProfileData {
   name?: string
   theme?: 'system' | 'light' | 'dark'
   timezone?: string
+  locale?: 'en' | 'yo' | 'ha' | 'ig'
   notifications?: {
     email?: boolean
     push?: boolean
@@ -159,6 +160,7 @@ export async function updateProfile(
   if (data.name !== undefined) user.name = data.name
   if (data.theme !== undefined) user.theme = data.theme
   if (data.timezone !== undefined) user.timezone = data.timezone
+  if (data.locale !== undefined) user.locale = data.locale
   if (data.notifications !== undefined) {
     if (data.notifications.email !== undefined) user.notifications.email = data.notifications.email
     if (data.notifications.push !== undefined) user.notifications.push = data.notifications.push
