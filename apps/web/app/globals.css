@@ -19,10 +19,10 @@
   --color-rule: #E5DFD2;
   --color-rule-2: #D9D2C2;
 
-  /* Accent - Ink Red */
-  --color-accent: #B23A2E;
-  --color-accent-2: #8E2B22;
-  --color-accent-tint: #F7E8E5;
+  /* Accent - Warm Aubergine */
+  --color-accent: #6E3A5F;
+  --color-accent-2: #56294A;
+  --color-accent-tint: #F2E8EE;
 
   /* Functional */
   --color-success: #2F6B3F;
@@ -36,8 +36,8 @@
   --color-subj-chemistry: #8E5A2B;
   --color-subj-biology: #4F7A3F;
   --color-subj-economics: #8E7F2B;
-  --color-subj-government: #8E3F5A;
-  --color-subj-literature: #5A3F8E;
+  --color-subj-government: #7F4A35;
+  --color-subj-literature: #3F5A8E;
   --color-subj-default: #7C766B;
 
   /* Typography */
@@ -69,9 +69,9 @@
   --color-ink-3: #7C766B;
   --color-rule: #2D2A23;
   --color-rule-2: #3A362D;
-  --color-accent: #D8584A;
-  --color-accent-2: #BC4438;
-  --color-accent-tint: #2A1A17;
+  --color-accent: #B07A9D;
+  --color-accent-2: #99668A;
+  --color-accent-tint: #2A1E25;
 }
 
 * {
