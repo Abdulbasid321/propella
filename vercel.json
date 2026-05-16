@@ -1,5 +1,0 @@
-{
-  "rootDirectory": "apps/web",
-  "installCommand": "corepack enable && corepack prepare pnpm@10.12.1 --activate && pnpm install",
-  "buildCommand": "pnpm build"
-}
