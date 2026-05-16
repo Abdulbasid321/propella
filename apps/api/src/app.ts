@@ -26,9 +26,31 @@ const app: Express = express()
 
 // Security middleware
 app.use(helmet())
+// app.use(
+//   cors({
+//     origin: env.FRONTEND_URL,
+//     credentials: true,
+//     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+//     allowedHeaders: ['Content-Type', 'Authorization'],
+//   }),
+// )
+
+// Allow multiple origins (dev + production)
+const allowedOrigins = [
+  'http://localhost:3000', // local dev
+  'https://propella-web-rvy6-ep3fhci7g-abdulbasid-s-projects.vercel.app' // your Vercel frontend
+]
+
 app.use(
   cors({
-    origin: env.FRONTEND_URL,
+    origin: function(origin, callback) {
+      // allow requests with no origin (like mobile apps, curl)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true)
+      } else {
+        callback(new Error(`CORS blocked for origin: ${origin}`))
+      }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
