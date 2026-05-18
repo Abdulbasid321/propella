@@ -10,6 +10,7 @@ import {
   sendStreakWarningEmail,
   sendWeeklyDigestEmail,
 } from './email'
+import { notify } from '../features/notifications/notification.service'
 
 // Every 5 minutes: process due reminders
 cron.schedule('*/5 * * * *', async () => {
@@ -35,6 +36,19 @@ cron.schedule('*/5 * * * *', async () => {
             await sendStudyReminderEmail(user.email, reminder.payload as { title: string; body: string; deeplink?: string })
           }
         }
+
+        // Also create an in-app notification for every reminder sent
+        const notifType = reminder.type === 'streak_warning'
+          ? 'streak_warning'
+          : reminder.type === 'weekly_review'
+            ? 'weekly_review'
+            : 'study_reminder'
+
+        await notify(reminder.userId.toString(), notifType, {
+          title: reminder.payload.title,
+          body: reminder.payload.body,
+          deeplink: reminder.payload.deeplink ?? null,
+        })
 
         await reminder.updateOne({ status: 'sent', sentAt: new Date() })
       } catch (err) {
@@ -75,6 +89,13 @@ cron.schedule('0 18 * * *', async () => {
           body: `You have a ${streak.currentStreak}-day streak. Study today to keep it.`,
         },
         status: 'scheduled',
+      })
+
+      // Immediate in-app notification (the email fires later when scheduler processes it)
+      await notify(streak.userId.toString(), 'streak_warning', {
+        title: 'Your streak is at risk',
+        body: `You have a ${streak.currentStreak}-day streak. Study today to keep it.`,
+        deeplink: '/dashboard',
       })
     }
 
