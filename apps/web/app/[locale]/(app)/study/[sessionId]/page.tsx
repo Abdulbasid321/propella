@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { Link } from '@/lib/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import ReactMarkdown from 'react-markdown'
 import { Pause, Play, X, FileText, MessageCircle, BookOpen } from 'lucide-react'

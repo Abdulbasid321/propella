@@ -1,6 +1,6 @@
 'use client'
 import { useState, use } from 'react'
-import Link from 'next/link'
+import { Link } from '@/lib/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { useQuery } from '@tanstack/react-query'
 import { ChevronRight, Clock, Calendar, BookOpen } from 'lucide-react'
