@@ -1,5 +1,5 @@
 'use client'
-import Link from 'next/link'
+import { Link } from '@/lib/i18n/navigation'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, Compass, Calendar, ClipboardCheck, FileText,

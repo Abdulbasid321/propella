@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { EmptyState } from '@/components/common/empty-state'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
-import Link from 'next/link'
+import { Link } from '@/lib/i18n/navigation'
 
 interface ProgressData {
   totalStudyHours: number

@@ -1,7 +1,7 @@
 'use client'
 import { format } from 'date-fns'
 import { Check, ArrowRight, Flame } from 'lucide-react'
-import Link from 'next/link'
+import { Link } from '@/lib/i18n/navigation'
 import {
   AreaChart, Area, XAxis, ResponsiveContainer, Tooltip,
 } from 'recharts'
