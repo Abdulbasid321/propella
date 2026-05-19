@@ -38,10 +38,10 @@ app.use(helmet())
 
 // Allow multiple origins (dev + production)
 const allowedOrigins = [
-  'http://localhost:3000', // local dev
-  'https://propella-web-rvy6-ep3fhci7g-abdulbasid-s-projects.vercel.app' // your Vercel frontend
+  'http://localhost:3000',
+  'https://propella-web-rvy6.vercel.app',
+  'https://propella-web-rvy6-ep3fhci7g-abdulbasid-s-projects.vercel.app',
 ]
-
 app.use(
   cors({
     origin: function(origin, callback) {
