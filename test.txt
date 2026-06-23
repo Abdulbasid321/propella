@@ -1,4 +1,0 @@
-https://raisn-backend.vercel.app/api/v1/wishlist/4c25403e-f35f-4afb-95a8-1b6f7b2b6031/items/bulk
-
-
-https://raisn-backend.vercel.app/api/v1/birthday-events/4c25403e-f35f-4afb-95a8-1b6f7b2b6031/contacts
