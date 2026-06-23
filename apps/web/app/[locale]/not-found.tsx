@@ -15,7 +15,6 @@ export default function NotFound() {
         textAlign: 'center',
       }}
     >
-      
       <p
         style={{
           fontFamily: 'var(--font-mono)',
