@@ -1,7 +1,11 @@
 import type { NextConfig } from 'next'
+import createNextIntlPlugin from 'next-intl/plugin'
 import pkg from './package.json'
 
+const withNextIntl = createNextIntlPlugin('./lib/i18n/request.ts')
+
 const nextConfig: NextConfig = {
+  allowedDevOrigins: ['192.168.0.2'],
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion', 'recharts'],
   },
@@ -10,4 +14,4 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default nextConfig
+export default withNextIntl(nextConfig)

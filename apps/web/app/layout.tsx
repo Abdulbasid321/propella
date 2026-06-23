@@ -1,8 +1,4 @@
-import type { Metadata } from 'next'
-import { Fraunces, Geist, JetBrains_Mono } from 'next/font/google'
-import { ThemeProvider } from 'next-themes'
-import { Providers } from '@/components/providers'
-import { Toaster } from '@/components/ui/toast'
+import { Fraunces, Geist, JetBrains_Mono, Noto_Sans, Noto_Serif } from 'next/font/google'
 import './globals.css'
 
 const fraunces = Fraunces({
@@ -24,21 +20,33 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 })
 
-export const metadata: Metadata = {
-  title: 'Propella — Exam preparation for serious candidates',
-  description: 'Build a personalized study path for JAMB, WAEC, and NECO. Structured repetition. Real syllabus.',
-}
+const notoSans = Noto_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-noto-sans',
+  display: 'swap',
+})
+
+const notoSerif = Noto_Serif({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-noto-serif',
+  display: 'swap',
+})
+
+const fontVars = [
+  fraunces.variable,
+  geist.variable,
+  jetbrainsMono.variable,
+  notoSans.variable,
+  notoSerif.variable,
+].join(' ')
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${fraunces.variable} ${geist.variable} ${jetbrainsMono.variable}`}>
-        <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <Providers>
-            {children}
-            <Toaster />
-          </Providers>
-        </ThemeProvider>
+    <html suppressHydrationWarning>
+      <body className={fontVars}>
+        {children}
       </body>
     </html>
   )

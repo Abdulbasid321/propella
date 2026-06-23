@@ -10,9 +10,13 @@ export async function generateInitialRoadmap(
   // Remove any existing roadmap for this user
   await RoadmapModel.deleteOne({ userId })
 
+  const selectedExamTypes = profile.examTypes?.length
+    ? profile.examTypes
+    : [profile.examType]
+
   const subjects = await SubjectModel.find({
     slug: { $in: profile.subjects.map((s) => s.slug) },
-    examTypes: profile.examType,
+    examTypes: { $in: selectedExamTypes },
   })
 
   const examDate = new Date(profile.examDate)
@@ -29,7 +33,7 @@ export async function generateInitialRoadmap(
       profileSubject?.isWeak ? 1.3 : profileSubject?.isStrong ? 0.8 : 1.0
 
     const subjectTopics = subject.topics
-      .filter((t) => t.examTypes.includes(profile.examType))
+      .filter((t) => t.examTypes.some((examType) => selectedExamTypes.includes(examType)))
       .sort((a, b) => a.order - b.order)
 
     for (let i = 0; i < subjectTopics.length; i++) {

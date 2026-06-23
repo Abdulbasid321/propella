@@ -1,8 +1,13 @@
 import { z } from 'zod'
 import { EXAM_TYPES } from '../constants'
 
+// export const OnboardingStep1Schema = z.object({
+//   examType: z.enum(EXAM_TYPES),
+// })
+
+// after
 export const OnboardingStep1Schema = z.object({
-  examType: z.enum(EXAM_TYPES),
+  examTypes: z.array(z.enum(EXAM_TYPES)).min(1),
 })
 
 export const OnboardingStep2JambSchema = z.object({

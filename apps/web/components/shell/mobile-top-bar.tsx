@@ -1,9 +1,9 @@
 'use client'
-import { Flame, Bell } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Flame } from 'lucide-react'
 import { Logo } from '@/components/common/logo'
 import { useStreakXP } from '@/lib/hooks/use-streak-xp'
 import { NumberCounter } from '@/components/common/number-counter'
+import { NotificationBell } from '@/components/notifications/NotificationBell'
 
 export function MobileTopBar() {
   const { streak } = useStreakXP()
@@ -33,9 +33,7 @@ export function MobileTopBar() {
             className="text-[16px] font-medium text-[var(--color-ink)]"
           />
         </div>
-        <Button variant="ghost" size="sm" className="p-1.5 h-auto" aria-label="Notifications">
-          <Bell size={17} strokeWidth={1.5} />
-        </Button>
+        <NotificationBell />
       </div>
     </header>
   )

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
 import { LogOut } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { api } from '@/lib/api-client'
 import { Button } from '@/components/ui/button'
@@ -18,6 +19,8 @@ export function SignOutDialog({ open, onClose }: SignOutDialogProps) {
   const router = useRouter()
   const logout = useAuthStore((s) => s.logout)
   const queryClient = useQueryClient()
+  const tAuth = useTranslations('auth')
+  const tCommon = useTranslations('common')
 
   async function handleConfirm() {
     setLoading(true)
@@ -97,7 +100,7 @@ export function SignOutDialog({ open, onClose }: SignOutDialogProps) {
                 marginBottom: 16,
               }}
             >
-              <LogOut size={18} strokeWidth={1.5} style={{ color: 'var(--color-danger)' }} />
+              <LogOut size={18} strokeWidth={1.5} style={{ color: 'var(--color-accent)' }} />
             </div>
 
             <h2
@@ -128,7 +131,7 @@ export function SignOutDialog({ open, onClose }: SignOutDialogProps) {
 
             <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
               <Button variant="ghost" onClick={onClose} disabled={loading}>
-                Cancel
+                {tCommon('cancel')}
               </Button>
               <button
                 onClick={handleConfirm}
@@ -143,7 +146,7 @@ export function SignOutDialog({ open, onClose }: SignOutDialogProps) {
                   fontWeight: 500,
                   fontFamily: 'var(--font-sans)',
                   color: 'white',
-                  backgroundColor: loading ? 'var(--color-ink-3)' : 'var(--color-danger)',
+                  backgroundColor: loading ? 'var(--color-ink-3)' : 'var(--color-accent)',
                   border: 'none',
                   borderRadius: 'var(--radius-sm)',
                   cursor: loading ? 'not-allowed' : 'pointer',
@@ -151,7 +154,7 @@ export function SignOutDialog({ open, onClose }: SignOutDialogProps) {
                 }}
               >
                 <LogOut size={14} strokeWidth={1.5} />
-                {loading ? 'Signing out…' : 'Sign out'}
+                {loading ? 'Signing out…' : tAuth('logout')}
               </button>
             </div>
           </motion.div>

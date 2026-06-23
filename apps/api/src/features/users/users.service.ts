@@ -9,6 +9,7 @@ import type { AuthUser } from '@propella/shared'
 
 interface ExamProfileSummary {
   examType: string
+  examTypes?: string[]
   examDate: string
   subjects: { slug: string; name: string; isWeak: boolean; isStrong: boolean; currentMastery: number }[]
   dailyStudyMinutes: number
@@ -45,6 +46,7 @@ function buildAuthUser(user: {
   onboardingStep: number
   theme: 'system' | 'light' | 'dark'
   timezone: string
+  locale?: 'en' | 'yo' | 'ha' | 'ig'
   avatarUrl?: string
 }): AuthUser {
   const result: AuthUser = {
@@ -56,6 +58,7 @@ function buildAuthUser(user: {
     onboardingStep: user.onboardingStep,
     theme: user.theme,
     timezone: user.timezone,
+    locale: user.locale ?? 'en',
   }
   if (user.avatarUrl !== undefined) result.avatarUrl = user.avatarUrl
   return result
@@ -86,6 +89,7 @@ export async function getMe(userId: string): Promise<MeResponse> {
   if (examProfile) {
     const summary: ExamProfileSummary = {
       examType: examProfile.examType,
+      examTypes: examProfile.examTypes?.length ? examProfile.examTypes : [examProfile.examType],
       examDate: examProfile.examDate.toISOString(),
       subjects: examProfile.subjects.map((s) => ({
         slug: s.slug,
@@ -136,6 +140,7 @@ interface UpdateProfileData {
   name?: string
   theme?: 'system' | 'light' | 'dark'
   timezone?: string
+  locale?: 'en' | 'yo' | 'ha' | 'ig'
   notifications?: {
     email?: boolean
     push?: boolean
@@ -159,6 +164,7 @@ export async function updateProfile(
   if (data.name !== undefined) user.name = data.name
   if (data.theme !== undefined) user.theme = data.theme
   if (data.timezone !== undefined) user.timezone = data.timezone
+  if (data.locale !== undefined) user.locale = data.locale
   if (data.notifications !== undefined) {
     if (data.notifications.email !== undefined) user.notifications.email = data.notifications.email
     if (data.notifications.push !== undefined) user.notifications.push = data.notifications.push

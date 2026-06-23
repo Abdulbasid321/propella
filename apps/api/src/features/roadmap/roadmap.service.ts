@@ -5,6 +5,7 @@ import { ExamProfileModel } from '../../models/ExamProfile'
 import { UserModel } from '../../models/User'
 import { AppError, NotFoundError } from '../../middleware/error-handler'
 import { generateInitialRoadmap } from '../../lib/adaptive-engine'
+import { notify } from '../notifications/notification.service'
 import type { Roadmap, RoadmapNode } from '@propella/shared'
 
 export async function getRoadmap(userId: string): Promise<Roadmap> {
@@ -97,9 +98,19 @@ export async function updateNodeStatus(
     throw new AppError(400, `Invalid status: ${status}`)
   }
 
+  const prevStatus = node.status
   node.status = status as 'locked' | 'ready' | 'in-progress' | 'completed' | 'needs-revision'
   roadmap.markModified('nodes')
   await roadmap.save()
+
+  if (prevStatus === 'locked' && status === 'ready') {
+    await notify(userId, 'topic_unlocked', {
+      title: `New topic unlocked`,
+      body: `${topicSlug.replace(/-/g, ' ')} is now available on your roadmap.`,
+      deeplink: `/roadmap/${subjectSlug}/${topicSlug}`,
+      metadata: { topicId: topicSlug, subjectSlug },
+    })
+  }
 }
 
 export async function updateNodeMastery(

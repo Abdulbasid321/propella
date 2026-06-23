@@ -21,14 +21,39 @@ import marathonRouter from './features/marathon/marathon.routes'
 import assistantRouter from './features/assistant/assistant.routes'
 import mocksRouter from './features/mocks/mocks.routes'
 import leaderboardRouter from './features/leaderboard/leaderboard.routes'
+import notificationsRouter from './features/notifications/notifications.routes'
 
 const app: Express = express()
 
 // Security middleware
 app.use(helmet())
+// app.use(
+//   cors({
+//     origin: env.FRONTEND_URL,
+//     credentials: true,
+//     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+//     allowedHeaders: ['Content-Type', 'Authorization'],
+//   }),
+// )
+
+// Allow multiple origins (dev + production)
+const allowedOrigins = [
+  env.FRONTEND_URL,
+  'http://localhost:3000',
+  'http://192.168.0.2:3000',
+  'https://propella-web-rvy6.vercel.app',
+  'https://propella-web-rvy6-ep3fhci7g-abdulbasid-s-projects.vercel.app',
+]
 app.use(
   cors({
-    origin: env.FRONTEND_URL,
+    origin: function(origin, callback) {
+      // allow requests with no origin (like mobile apps, curl)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true)
+      } else {
+        callback(new Error(`CORS blocked for origin: ${origin}`))
+      }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -64,6 +89,7 @@ app.use('/api/marathon', authenticate, marathonRouter)
 app.use('/api/assistant', authenticate, assistantRouter)
 app.use('/api/mocks', authenticate, mocksRouter)
 app.use('/api/leaderboard', authenticate, leaderboardRouter)
+app.use('/api/notifications', authenticate, notificationsRouter)
 
 // Global error handler — must be last
 app.use(errorHandler)

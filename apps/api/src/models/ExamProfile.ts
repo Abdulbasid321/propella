@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, Document, Types } from 'mongoose'
+import mongoose, { Schema, model, Document, Types, Model } from 'mongoose'
 
 export interface IExamSubject {
   subjectId: string
@@ -14,6 +14,7 @@ export interface IExamProfile extends Document {
   _id: Types.ObjectId
   userId: Types.ObjectId
   examType: 'jamb' | 'waec' | 'neco'
+  examTypes?: ('jamb' | 'waec' | 'neco')[]
   examDate: Date
   intendedCourse?: string
   institutionType?: 'university' | 'polytechnic' | 'college'
@@ -52,6 +53,17 @@ const examProfileSchema = new Schema<IExamProfile>(
       enum: ['jamb', 'waec', 'neco'],
       required: true,
     },
+    examTypes: {
+      type: [String],
+      enum: ['jamb', 'waec', 'neco'],
+      default: undefined,
+      validate: {
+        validator(value: string[] | undefined): boolean {
+          return value === undefined || value.length > 0
+        },
+        message: 'At least one exam type is required',
+      },
+    },
     examDate: {
       type: Date,
       required: true,
@@ -83,4 +95,7 @@ const examProfileSchema = new Schema<IExamProfile>(
   { timestamps: true },
 )
 
-export const ExamProfileModel = (mongoose.models['ExamProfile'] as ReturnType<typeof model<IExamProfile>>) ?? model<IExamProfile>('ExamProfile', examProfileSchema)
+// export const ExamProfileModel = (mongoose.models['ExamProfile'] as ReturnType<typeof model<IExamProfile>>) ?? model<IExamProfile>('ExamProfile', examProfileSchema)
+export const ExamProfileModel =
+  (mongoose.models.ExamProfile as Model<IExamProfile>) ||
+  model<IExamProfile>('ExamProfile', examProfileSchema)

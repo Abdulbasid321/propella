@@ -19,6 +19,7 @@ export interface IUser extends Document {
   }
   theme: 'system' | 'light' | 'dark'
   timezone: string
+  locale: 'en' | 'yo' | 'ha' | 'ig'
   resetPasswordToken?: string
   resetPasswordExpires?: Date
   createdAt: Date
@@ -79,6 +80,11 @@ const userSchema = new Schema<IUser>(
     timezone: {
       type: String,
       default: 'Africa/Lagos',
+    },
+    locale: {
+      type: String,
+      enum: ['en', 'yo', 'ha', 'ig'],
+      default: 'en',
     },
     resetPasswordToken: {
       type: String,

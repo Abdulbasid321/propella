@@ -63,12 +63,19 @@ export async function saveStep1(
 ): Promise<void> {
   const user = await getUser(userId)
 
-  // Upsert the ExamProfile with the chosen exam type
+  // Keep examType as the primary exam for older callers while persisting
+  // all selected exams for multi-exam flows.
+  const primaryExamType = data.examTypes[0]
+  if (!primaryExamType) {
+    throw new AppError(400, 'Select at least one exam type')
+  }
+
   await ExamProfileModel.findOneAndUpdate(
     { userId },
     {
       $set: {
-        examType: data.examType,
+        examType: primaryExamType,
+        examTypes: data.examTypes,
         // Provide placeholder values that later steps will overwrite
         examDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
       },

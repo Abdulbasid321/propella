@@ -1,33 +1,37 @@
 'use client'
-import Link from 'next/link'
+import { Link } from '@/lib/i18n/navigation'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, Compass, Calendar, ClipboardCheck, FileText,
   Timer, Sparkles, TrendingUp, Trophy, User, CreditCard, Bell,
   LifeBuoy, LogOut,
 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { Logo } from '@/components/common/logo'
 import { Badge } from '@/components/ui/badge'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { SignOutDialog } from '@/components/auth/sign-out-dialog'
+import { LocaleSwitcher } from '@/components/common/locale-switcher'
 import { cn } from '@/lib/utils/cn'
 import { useState, useRef, useEffect } from 'react'
-
-const navItems = [
-  { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { href: '/roadmap', icon: Compass, label: 'Roadmap' },
-  { href: '/planner', icon: Calendar, label: 'Planner' },
-  { href: '/quizzes', icon: ClipboardCheck, label: 'Quizzes' },
-  { href: '/mocks', icon: FileText, label: 'Mocks' },
-  { href: '/marathon', icon: Timer, label: 'Marathon' },
-  { href: '/assistant', icon: Sparkles, label: 'AI Assistant' },
-  { href: '/progress', icon: TrendingUp, label: 'Progress' },
-  { href: '/leaderboard', icon: Trophy, label: 'Leaderboard' },
-]
 
 export function Sidebar() {
   const pathname = usePathname()
   const user = useAuthStore((s) => s.user)
+  const tNav = useTranslations('nav')
+  const tAuth = useTranslations('auth')
+
+  const navItems = [
+    { href: '/dashboard', icon: LayoutDashboard, label: tNav('dashboard') },
+    { href: '/roadmap', icon: Compass, label: tNav('roadmap') },
+    { href: '/planner', icon: Calendar, label: tNav('planner') },
+    { href: '/quizzes', icon: ClipboardCheck, label: tNav('quizzes') },
+    { href: '/mocks', icon: FileText, label: tNav('mocks') },
+    { href: '/marathon', icon: Timer, label: tNav('marathon') },
+    { href: '/assistant', icon: Sparkles, label: tNav('assistant') },
+    { href: '/progress', icon: TrendingUp, label: tNav('progress') },
+    { href: '/leaderboard', icon: Trophy, label: tNav('leaderboard') },
+  ]
   const [menuOpen, setMenuOpen] = useState(false)
   const [signOutOpen, setSignOutOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -168,7 +172,7 @@ export function Sidebar() {
             }}
           >
             {[
-              { href: '/settings', icon: User, label: 'Profile' },
+              { href: '/settings', icon: User, label: tNav('profile') },
               { href: '/settings?tab=plan', icon: CreditCard, label: 'Plan & billing' },
               { href: '/settings?tab=notifications', icon: Bell, label: 'Notifications' },
               { href: '/help', icon: LifeBuoy, label: 'Help & support' },
@@ -184,18 +188,21 @@ export function Sidebar() {
               </Link>
             ))}
 
+            {/* Language switcher */}
+            <LocaleSwitcher variant="popover" onSelect={() => setMenuOpen(false)} />
+
             {/* Divider */}
             <div style={{ height: 1, backgroundColor: 'var(--color-rule)', margin: '4px 0' }} />
 
             <button
               onClick={() => { setMenuOpen(false); setSignOutOpen(true) }}
               className="flex items-center gap-2.5 px-3 py-2 text-[14px] font-medium w-full text-left transition-colors"
-              style={{ color: 'var(--color-danger)', background: 'none', border: 'none', cursor: 'pointer' }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-accent-tint)')}
+              style={{ color: 'var(--color-ink-2)', background: 'none', border: 'none', cursor: 'pointer' }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-paper-3)')}
               onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
             >
               <LogOut size={16} strokeWidth={1.5} />
-              Sign out
+              {tAuth('logout')}
             </button>
           </div>
         )}

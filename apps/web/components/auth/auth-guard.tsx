@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/lib/i18n/navigation'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { Skeleton } from '@/components/ui/skeleton'
 

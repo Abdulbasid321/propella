@@ -1,0 +1,212 @@
+/* ============================================
+   1. RESET & BASE SETUP
+   We reset default browser spacing first, because
+   every browser adds its own margin/padding to
+   body, headings, lists, etc. Starting from zero
+   gives us full control.
+   ============================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* padding/border included in element's width, not added on top */
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: #f3f4f1; /* light grey-green page background, like the screenshot */
+  color: #1a1a1a;
+}
+
+/* ============================================
+   2. LAYOUT SHELL
+   The whole app is a flex row: sidebar on the
+   left, main content filling the rest.
+   ============================================ */
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ============================================
+   3. SIDEBAR CONTAINER
+   ============================================ */
+.sidebar {
+  width: 260px;
+  background-color: #ffffff;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px; /* even spacing between logo / menu / general / promo card */
+  border-right: 1px solid #ececec;
+}
+
+/* ============================================
+   4. LOGO
+   ============================================ */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background-color: #1b5e3f; /* dark green from the screenshot */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: #14532d;
+}
+
+/* ============================================
+   5. NAV SECTIONS (MENU / GENERAL)
+   ============================================ */
+.nav-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nav-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #9ca3af; /* muted grey for section labels */
+  padding-left: 12px;
+}
+
+.nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Base nav item style */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #6b7280; /* inactive items are muted grey */
+  font-size: 14px;
+  font-weight: 500;
+  position: relative; /* needed so the active bar can be positioned against this item */
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.nav-item:hover {
+  background-color: #f3f4f1;
+  color: #1a1a1a;
+}
+
+.nav-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+/* Active state: light green tint + dark text + left accent bar */
+.nav-item.active {
+  background-color: #eaf4ee;
+  color: #14532d;
+  font-weight: 600;
+}
+
+/* The little green bar that sits on the far left edge of the sidebar
+   next to the active item. We attach it with ::before so we don't
+   need an extra HTML element just for decoration. */
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: -20px; /* pulls it out to the sidebar's edge, cancelling sidebar padding */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 60%;
+  background-color: #1b5e3f;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Badge, e.g. "12+" next to Tasks */
+.badge {
+  margin-left: auto; /* pushes it to the far right of the flex row */
+  background-color: #14532d;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px; /* fully rounded pill shape */
+}
+
+/* ============================================
+   6. PROMO CARD (Download our Mobile App)
+   ============================================ */
+.promo-card {
+  margin-top: auto; /* pushes this card to the bottom of the sidebar */
+  background: linear-gradient(160deg, #1a1a1a, #0d0d0d);
+  border-radius: 16px;
+  padding: 20px;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.promo-icon {
+  width: 28px;
+  height: 28px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.promo-title {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.promo-subtitle {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 16px;
+}
+
+.promo-btn {
+  width: 100%;
+  background-color: #1b5e3f;
+  color: #ffffff;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.promo-btn:hover {
+  background-color: #14532d;
+}
+
+/* ============================================
+   7. MAIN CONTENT PLACEHOLDER
+   Just enough so the layout has something to
+   sit next to while we build it out next.
+   ============================================ */
+.main-content {
+  flex: 1;
+  padding: 32px;
+}

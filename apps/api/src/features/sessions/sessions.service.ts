@@ -4,8 +4,11 @@ import { XPEventModel } from '../../models/XPEvent'
 import { StreakModel } from '../../models/Streak'
 import { RoadmapModel } from '../../models/Roadmap'
 import { AppError, NotFoundError } from '../../middleware/error-handler'
+import { notify } from '../notifications/notification.service'
 import { XP } from '@propella/shared'
 import { logger } from '../../config/logger'
+
+const STREAK_MILESTONES = new Set([7, 14, 30, 60, 100])
 
 interface TopicRef {
   subjectSlug: string
@@ -108,6 +111,14 @@ export async function endSession(
       }
       streak.lastActiveDate = new Date()
       await streak.save()
+
+      if (STREAK_MILESTONES.has(streak.currentStreak)) {
+        await notify(userId, 'streak_milestone', {
+          title: `${streak.currentStreak}-day streak`,
+          body: `You have studied ${streak.currentStreak} days in a row. Keep it going.`,
+          deeplink: '/dashboard',
+        })
+      }
     }
   } else {
     // Create streak if it doesn't exist

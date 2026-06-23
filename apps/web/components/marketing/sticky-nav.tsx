@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
+import { Link } from '@/lib/i18n/navigation'
 import { useTheme } from 'next-themes'
 import { Logo } from '@/components/common/logo'
 import { Button } from '@/components/ui/button'

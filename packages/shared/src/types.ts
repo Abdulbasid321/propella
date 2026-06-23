@@ -21,6 +21,7 @@ export interface AuthUser {
   onboardingStep: number
   theme: 'system' | 'light' | 'dark'
   timezone: string
+  locale?: 'en' | 'yo' | 'ha' | 'ig'
   avatarUrl?: string
 }
 
@@ -33,6 +34,7 @@ export interface ExamProfile {
   id: string
   userId: string
   examType: ExamType
+  examTypes?: ExamType[]
   examDate: string
   intendedCourse?: string
   institutionType?: 'university' | 'polytechnic' | 'college'
@@ -135,6 +137,7 @@ export interface XPSummary {
 export interface DashboardData {
   daysToExam: number
   examType: ExamType
+  examTypes?: ExamType[]
   examDate: string
   todayTopics: TodayTopic[]
   streak: UserStreak

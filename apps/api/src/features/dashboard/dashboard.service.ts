@@ -161,6 +161,7 @@ export async function getDashboard(userId: string): Promise<DashboardData> {
   return {
     daysToExam,
     examType: examProfile.examType,
+    examTypes: examProfile.examTypes?.length ? examProfile.examTypes : [examProfile.examType],
     examDate: examProfile.examDate.toISOString(),
     todayTopics,
     streak,
