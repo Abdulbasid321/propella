@@ -1,6 +1,6 @@
 {
   "installCommand": "npm install -g pnpm@9.15.0 && pnpm install --no-frozen-lockfile",
-  "buildCommand": "pnpm build",
+  "buildCommand": "pnpm --filter @propella/shared build && pnpm build",
   "outputDirectory": ".next",
   "framework": "nextjs"
 }
